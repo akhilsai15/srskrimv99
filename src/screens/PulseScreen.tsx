@@ -256,27 +256,28 @@ function TextPost({ post, onLike, onComment, onShare, onSave, onReact, navigate,
         </AnimatePresence>
 
         <p className={`text-[15px] leading-relaxed font-medium ${hasCustomColor ? 'text-black' : 'text-white'}`}>
-          {post.text && typeof post.text === 'string' ? post.text.split(' ').map((w: string, i: number) =>
-            w.startsWith('#') ? (
-              <span
-                key={i}
-                className="text-[#00F0FF] font-semibold cursor-pointer hover:underline"
-                onClick={(e) => { e.stopPropagation(); navigate(`/hashtag/${encodeURIComponent(w)}`); }}
-              >
-                {w}{' '}
-              </span>
-            ) : w.startsWith('@') ? (
-              <span
-                key={i}
-                className="text-[#B026FF] font-semibold cursor-pointer hover:underline"
-                onClick={(e) => { e.stopPropagation(); navigate(`/profile/${w.replace('@', '').replace(/[^\w]/g, '')}`); }}
-              >
-                {w}{' '}
-              </span>
-            ) : (
-              w + ' '
-            )
-          ) : null}
+          {post.text && typeof post.text === 'string' ? post.text.split(' ').map((w: string, i: number) => (
+            <React.Fragment key={`word_${i}`}>
+              {w.startsWith('#') ? (
+                <span
+                  className="text-[#00F0FF] font-semibold cursor-pointer hover:underline"
+                  onClick={(e) => { e.stopPropagation(); navigate(`/hashtag/${encodeURIComponent(w)}`); }}
+                >
+                  {w}
+                </span>
+              ) : w.startsWith('@') ? (
+                <span
+                  className="text-[#B026FF] font-semibold cursor-pointer hover:underline"
+                  onClick={(e) => { e.stopPropagation(); navigate(`/profile/${w.replace('@', '').replace(/[^\w]/g, '')}`); }}
+                >
+                  {w}
+                </span>
+              ) : (
+                w
+              )}
+              {' '}
+            </React.Fragment>
+          )) : null}
         </p>
       </div>
 
@@ -425,7 +426,7 @@ function PollPost({ post, onLike, onComment, onShare, onSave, navigate, currentU
           const isMine = myVote === i;
           return (
             <button
-              key={i}
+              key={`poll-opt-${i}`}
               onClick={() => handleVote(i)}
               disabled={voting}
               className={`relative w-full text-left rounded-xl border overflow-hidden px-3.5 py-3 transition-colors ${isMine ? 'border-[#B026FF]' : 'border-white/15 hover:border-white/30'}`}
@@ -705,7 +706,7 @@ function MultiImagePost({ post, onLike, onComment, onShare, onSave, onReact, nav
         {/* Dots */}
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
           {images.map((_: any, i: number) => (
-            <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all ${i === imgIdx ? 'bg-white w-4' : 'bg-white/40'}`} />
+            <div key={`image-dot-${i}`} className={`w-1.5 h-1.5 rounded-full transition-all ${i === imgIdx ? 'bg-white w-4' : 'bg-white/40'}`} />
           ))}
         </div>
 
@@ -833,19 +834,21 @@ function PostActions({ post, onLike, onComment, onShare, onSave, onReact, naviga
       {post.caption && typeof post.caption === 'string' && (
         <p className="text-sm leading-relaxed">
           <span className="font-semibold text-white mr-2">{safeUserString(post.user)}</span>
-          {post.caption.split(' ').map((w: string, i: number) =>
-            w.startsWith('#') ? (
-              <span
-                key={i}
-                className="text-[#00F0FF] cursor-pointer hover:underline"
-                onClick={(e) => { e.stopPropagation(); navigate?.(`/hashtag/${encodeURIComponent(w)}`); }}
-              >
-                {w}{' '}
-              </span>
-            ) : (
-              w + ' '
-            )
-          )}
+          {post.caption.split(' ').map((w: string, i: number) => (
+            <React.Fragment key={`caption_word_${i}`}>
+              {w.startsWith('#') ? (
+                <span
+                  className="text-[#00F0FF] cursor-pointer hover:underline"
+                  onClick={(e) => { e.stopPropagation(); navigate?.(`/hashtag/${encodeURIComponent(w)}`); }}
+                >
+                  {w}
+                </span>
+              ) : (
+                w
+              )}
+              {' '}
+            </React.Fragment>
+          ))}
         </p>
       )}
     </div>
@@ -2136,7 +2139,7 @@ function PulseCreateSheet({ isOpen, onClose, currentUser, onPost, onSchedule, dr
               {isPollMode && (
                 <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 p-3">
                   {pollOptions.map((opt, i) => (
-                    <div key={i} className="flex items-center gap-2">
+                    <div key={`poll-creator-opt-${i}`} className="flex items-center gap-2">
                       <input
                         type="text"
                         value={opt}
@@ -3526,7 +3529,7 @@ export default function PulseScreen() {
         {loading ? (
           <div className="px-4 py-3 flex gap-4 overflow-x-auto no-scrollbar">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="flex flex-col items-center gap-1 min-w-[72px] animate-pulse opacity-40">
+              <div key={`spark-skeleton-${i}`} className="flex flex-col items-center gap-1 min-w-[72px] animate-pulse opacity-40">
                 <div className="w-16 h-16 rounded-full bg-white/10" />
                 <div className="w-10 h-2 bg-white/10 rounded" />
               </div>
@@ -3619,7 +3622,7 @@ export default function PulseScreen() {
       {/* ── FEED ─────────────────────────────────────── */}
       <div className="flex flex-col pt-4">
         {loading ? (
-          Array.from({ length: 4 }).map((_, i) => <PostSkeleton key={i} />)
+          Array.from({ length: 4 }).map((_, i) => <PostSkeleton key={`feed-loading-skeleton-${i}`} />)
         ) : (() => {
           const isBackgroundMuted = activeUserIndex !== null || isSparkCreatorOpen || !!storyBehindPostId || !!fullscreenMedia;
           return displayedPosts.map((post, idx) => {

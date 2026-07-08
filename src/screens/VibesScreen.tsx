@@ -70,7 +70,7 @@ function ProgressBars({ total, current }: { total: number; current: number }) {
   return (
     <div className="flex gap-1 px-4">
       {Array.from({ length: Math.min(total, 10) }).map((_, i) => (
-        <div key={i} className="flex-1 h-[3px] rounded-full overflow-hidden bg-white/20">
+        <div key={`vibe-progress-${i}`} className="flex-1 h-[3px] rounded-full overflow-hidden bg-white/20">
           <motion.div
             className="h-full rounded-full bg-white"
             initial={{ width: i < current ? '100%' : '0%' }}
