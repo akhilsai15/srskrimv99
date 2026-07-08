@@ -190,12 +190,12 @@ export function SparkRow({ sparks, onSparkClick, onAddSpark, currentUser, active
                    <Zap className="w-2.5 h-2.5 text-yellow-400 fill-yellow-400" />
                  </div>
                )}
-               {latestSpark.type === 'image' && (
+               {false && (
                  <div className="absolute -bottom-1 -right-1 bg-black/80 backdrop-blur-md rounded-full p-1 border border-white/20 z-10 shadow-lg flex items-center justify-center">
                    <ImageIcon className="w-3 h-3 text-[#00F0FF]" />
                  </div>
                )}
-               {latestSpark.type === 'video' && (
+               {false && (
                  <div className="absolute -bottom-1 -right-1 bg-black/80 backdrop-blur-md rounded-full px-1.5 py-0.5 border border-white/20 z-10 shadow-lg flex items-center gap-1 justify-center">
                    <Video className="w-3 h-3 text-[#FF2D87]" />
                    {latestSpark.duration && <span className="text-[9px] font-bold text-white">0:{latestSpark.duration.toString().padStart(2, '0')}</span>}
