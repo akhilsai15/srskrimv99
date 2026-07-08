@@ -245,3 +245,48 @@ export function compressImage(base64Str: string, maxWidth = 1080, quality = 0.85
   });
 }
 
+export async function getAudioWaveformPeaks(audioUrlOrBlob: string | Blob, barCount = 40): Promise<number[]> {
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) {
+      return Array.from({ length: barCount }, () => 0.2 + Math.random() * 0.4);
+    }
+    const audioCtx = new AudioContextClass();
+    
+    let arrayBuffer: ArrayBuffer;
+    if (typeof audioUrlOrBlob === 'string') {
+      const response = await fetch(audioUrlOrBlob);
+      arrayBuffer = await response.arrayBuffer();
+    } else {
+      arrayBuffer = await audioUrlOrBlob.arrayBuffer();
+    }
+    
+    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    const channelData = audioBuffer.getChannelData(0);
+    const step = Math.floor(channelData.length / barCount);
+    const peaks: number[] = [];
+    
+    for (let i = 0; i < barCount; i++) {
+      let max = 0;
+      const start = i * step;
+      const end = start + step;
+      for (let j = start; j < end; j++) {
+        const val = Math.abs(channelData[j]);
+        if (val > max) {
+          max = val;
+        }
+      }
+      peaks.push(max);
+    }
+    
+    // Normalize peaks
+    const maxPeak = Math.max(...peaks, 0.01);
+    const normalized = peaks.map(p => Math.max(0.15, p / maxPeak));
+    return normalized;
+  } catch (err) {
+    console.warn("Failed to generate real audio waveform, using fallback:", err);
+    return Array.from({ length: barCount }, () => 0.2 + Math.random() * 0.4);
+  }
+}
+
+

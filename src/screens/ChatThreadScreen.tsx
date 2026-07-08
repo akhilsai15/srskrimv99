@@ -564,13 +564,14 @@ export default function ChatThreadScreen() {
     }, 500);
   };
 
-  const handleSendVoice = (duration: number, waveform: number[]) => {
+  const handleSendVoice = (duration: number, waveform: number[], uri?: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
       sender: 'me',
       type: 'voice',
       duration,
       waveform,
+      uri,
       mood: mood || undefined,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       status: 'sending'

@@ -44,6 +44,7 @@ export interface VoiceMessage extends BaseMessage {
   duration: number;
   waveform: number[];
   played?: boolean;
+  uri?: string;
 }
 
 export interface ImageMessage extends BaseMessage {

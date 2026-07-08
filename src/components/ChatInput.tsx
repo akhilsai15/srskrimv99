@@ -7,12 +7,13 @@ import { containsFilteredKeyword } from '../lib/mock/mockSocialGraph';
 import { Mood } from '../types';
 import { CHAT_MOODS } from '../constants/moods';
 import { autocorrectAtCursor } from '../lib/autocorrect';
+import { getAudioWaveformPeaks } from '../lib/services/mediaStorage';
 
 interface Props {
   currentMood: Mood;
   onSetMood: (mood: Mood) => void;
   onSendMessage: (text: string, isPulsed?: boolean) => void;
-  onSendVoice: (duration: number, waveform: number[]) => void;
+  onSendVoice: (duration: number, waveform: number[], uri?: string) => void;
   onSendGif: (gif: any) => void;
   onSendSticker: (sticker: any) => void;
   onSendAttachment?: (type: string, data: any) => void;
@@ -85,12 +86,38 @@ export function ChatInput({ currentMood, onSetMood, onSendMessage, onSendVoice, 
 
   const currentMoodObj = CHAT_MOODS.find(m => m.id === currentMood);
 
-  const startRecording = () => {
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+
+  const startRecording = async () => {
     if (text.length > 0) return;
     setIsRecording(true);
     setIsRecordingLocked(false);
     setRecordingTime(0);
     setLiveWaveform(Array(20).fill(0.1));
+    audioChunksRef.current = [];
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const options = MediaRecorder.isTypeSupported('audio/webm') 
+        ? { mimeType: 'audio/webm' } 
+        : { mimeType: 'audio/ogg' };
+      
+      const mediaRecorder = new MediaRecorder(stream, options);
+      mediaRecorderRef.current = mediaRecorder;
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.start(100);
+    } catch (err) {
+      console.warn("Could not start microphone recording:", err);
+      mediaRecorderRef.current = null;
+    }
+
     recordStartTime.current = Date.now();
     recordInterval.current = setInterval(() => {
       setRecordingTime(Math.floor((Date.now() - recordStartTime.current) / 1000));
@@ -110,8 +137,28 @@ export function ChatInput({ currentMood, onSetMood, onSendMessage, onSendVoice, 
     clearInterval(recordInterval.current);
     clearInterval(waveformInterval.current);
     const actualDuration = Math.max(1, Math.floor((Date.now() - recordStartTime.current) / 1000));
-    if (!cancel && actualDuration > 0) {
-      onSendVoice(actualDuration, generateWaveform(40));
+
+    const mediaRecorder = mediaRecorderRef.current;
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.onstop = async () => {
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+
+        if (!cancel && actualDuration > 0) {
+          const audioBlob = new Blob(audioChunksRef.current, { type: mediaRecorder.mimeType || 'audio/webm' });
+          const reader = new FileReader();
+          reader.onloadend = async () => {
+            const base64Url = reader.result as string;
+            const realPeaks = await getAudioWaveformPeaks(audioBlob, 40);
+            onSendVoice(actualDuration, realPeaks, base64Url);
+          };
+          reader.readAsDataURL(audioBlob);
+        }
+      };
+      mediaRecorder.stop();
+    } else {
+      if (!cancel && actualDuration > 0) {
+        onSendVoice(actualDuration, generateWaveform(40));
+      }
     }
     setRecordingTime(0);
   };

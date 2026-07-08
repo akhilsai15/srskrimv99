@@ -15,6 +15,7 @@ import { BondIcon } from '../components/BondIcon';
 import { GroupCreateFlow } from '../components/GroupCreateFlow';
 import { MOCK_CHATS } from '../lib/mock/mockChatDirectory';
 import { useCurrentUser } from '../hooks/useCurrentUser';
+import { AudioWaveformPlayer } from '../components/AudioWaveformPlayer';
 
 
 function SwipeableChatRow({ chat, onClick }: { chat: any, onClick: any, key?: React.Key }) {
@@ -1472,31 +1473,14 @@ function StoryViewerOverlay({ story, onClose, onDelete, onReply, onReact }: Stor
           className="absolute top-20 left-1/2 -translate-x-1/2 z-20 bg-[#161622]/90 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full flex items-center gap-3 shadow-2xl"
         >
           {story.audio.type === 'mic' ? (
-            <>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (audioRef.current) {
-                    if (isPlaying) {
-                      audioRef.current.pause();
-                      setIsPlaying(false);
-                    } else {
-                      audioRef.current.play().then(() => setIsPlaying(true)).catch(e => console.warn(e));
-                    }
-                  }
-                }}
-                className="w-7 h-7 rounded-full bg-[#B026FF] hover:bg-[#D869FF] flex items-center justify-center text-white transition-colors cursor-pointer"
-              >
-                {isPlaying ? <Square className="w-3.5 h-3.5 fill-white" /> : <Play className="w-3.5 h-3.5 fill-white ml-0.5" />}
-              </button>
-              <div className="flex flex-col">
-                <span className="text-[8px] font-black tracking-wider text-white/40 font-mono uppercase">VOICE CLIP</span>
-                <span className="text-[10px] font-black text-emerald-400">
-                  {isPlaying ? 'PLAYING NOTE...' : 'PAUSED'}
-                </span>
-              </div>
-              <SoundwaveBars active={isPlaying} />
-            </>
+            <AudioWaveformPlayer
+              src={story.audio.data}
+              isMe={false}
+              barCount={20}
+              className="!p-0 min-w-[200px]"
+              speedControl={false}
+              onPlayStateChange={(playing) => setIsPlaying(playing)}
+            />
           ) : (
             <>
               <button

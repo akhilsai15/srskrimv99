@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Search, Music, Upload, Play, Pause, Check, AlertTriangle, ChevronRight, TrendingUp, Flame } from 'lucide-react';
+import { getAudioWaveformPeaks } from '../lib/services/mediaStorage';
 
 export interface Track {
   id: string;
@@ -74,6 +75,25 @@ export function MusicPicker({ isOpen, onClose, onSelect, currentMusic, context =
   // New states for the double-sided 15s/30s custom clip audio trimmer
   const [clipDuration, setClipDuration] = useState<number>(currentMusic?.duration_s || 15);
   const [isTrimPreviewPlaying, setIsTrimPreviewPlaying] = useState(false);
+  const [trackPeaks, setTrackPeaks] = useState<number[]>([]);
+  const [previewProgress, setPreviewProgress] = useState(0);
+
+  useEffect(() => {
+    const url = selectedTrack?.url || uploadedFile?.url;
+    if (!url) {
+      setTrackPeaks([]);
+      return;
+    }
+    let cancelled = false;
+    getAudioWaveformPeaks(url, 40)
+      .then(peaks => {
+        if (!cancelled) setTrackPeaks(peaks);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedTrack?.url, uploadedFile?.url]);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const uploadAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -173,12 +193,14 @@ export function MusicPicker({ isOpen, onClose, onSelect, currentMusic, context =
       if (audio.currentTime >= endSecs || audio.currentTime < trimStart) {
         audio.currentTime = trimStart;
       }
+      setPreviewProgress(Math.max(0, Math.min(1, (audio.currentTime - trimStart) / clipDuration)));
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
     return () => {
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.pause();
+      setPreviewProgress(0);
     };
   }, [selectedTrack, trimStart, clipDuration, isTrimPreviewPlaying]);
 
@@ -201,6 +223,7 @@ export function MusicPicker({ isOpen, onClose, onSelect, currentMusic, context =
       if (audio.currentTime >= endSecs || audio.currentTime < uploadTrimStart) {
         audio.currentTime = uploadTrimStart;
       }
+      setPreviewProgress(Math.max(0, Math.min(1, (audio.currentTime - uploadTrimStart) / clipDuration)));
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -255,16 +278,20 @@ export function MusicPicker({ isOpen, onClose, onSelect, currentMusic, context =
         </div>
 
         {/* Visual Waveform Track */}
-        <div className="relative h-6 bg-white/5 rounded-lg overflow-hidden border border-white/10 flex items-center">
-          {/* Mock Waveform Bars */}
-          <div className="absolute inset-0 flex items-center justify-between px-3 gap-[2px] opacity-20 pointer-events-none">
-            {Array.from({ length: 40 }).map((_, idx) => {
+        <div className="relative h-8 bg-white/5 rounded-lg overflow-hidden border border-white/10 flex items-center">
+          {/* Waveform Bars */}
+          <div className="absolute inset-0 flex items-center justify-between px-3 gap-[2px] pointer-events-none">
+            {(trackPeaks.length > 0 ? trackPeaks : Array.from({ length: 40 }).map((_, idx) => {
               const h = 10 + Math.sin(idx * 0.5) * 12 + Math.cos(idx * 0.3) * 6;
+              return Math.max(0.15, h / 28);
+            })).map((val, idx) => {
+              const isPlayed = (idx / 40) <= previewProgress;
+              const barHeightPercent = val * 100;
               return (
                 <div 
                   key={idx} 
-                  className="w-[3px] bg-white rounded-full" 
-                  style={{ height: `${Math.max(4, Math.min(24, h))}px` }} 
+                  className={`w-[3px] rounded-full transition-colors duration-150 ${isPlayed ? 'bg-[#00F0FF]' : 'bg-white/20'}`} 
+                  style={{ height: `${Math.max(15, Math.min(90, barHeightPercent))}%` }} 
                 />
               );
             })}

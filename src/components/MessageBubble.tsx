@@ -4,6 +4,7 @@ import { motion, useAnimation, AnimatePresence } from 'motion/react';
 import { Message, Mood, Theme } from '../types';
 import { CHAT_MOODS } from '../constants/moods';
 import { TranslatableText } from './TranslatableText';
+import { AudioWaveformPlayer } from './AudioWaveformPlayer';
 
 interface Props {
   message: Message;
@@ -20,138 +21,18 @@ interface Props {
   onVotePoll?: (messageId: string, optionId: string) => void;
 }
 
-const useVoicePlayback = (duration: number) => {
-  const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [speed, setSpeed] = useState(1);
-  const [elapsed, setElapsed] = useState(0);
-
-  const speedOptions = [1, 1.5, 2];
-
-  const cycleSpeed = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const current = speedOptions.indexOf(speed);
-    const next = (current + 1) % speedOptions.length;
-    setSpeed(speedOptions[next]);
-  };
-
-  useEffect(() => {
-    if (!playing) return;
-
-    const interval = setInterval(() => {
-      setElapsed(e => {
-        const next = e + (0.1 * speed);
-        if (next >= duration) {
-          setPlaying(false);
-          setProgress(0);
-          return 0; // return 0 instead of next for elapsed to reset immediately on end
-        }
-        setProgress(next / duration);
-        return next;
-      });
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [playing, speed, duration]);
-  
-  // reset on completion
-  useEffect(() => {
-      if(progress >= 1) {
-          setPlaying(false);
-          setProgress(0);
-          setElapsed(0);
-      }
-  }, [progress])
-
-  return { playing, setPlaying, progress, speed, cycleSpeed, elapsed, setProgress, setElapsed };
-};
-
 const VoiceContent = ({ message, isMe }: { message: any, isMe: boolean }) => {
-  const { duration, waveform = Array(40).fill(0.2), played } = message;
-  const { playing, setPlaying, progress, speed, cycleSpeed, elapsed, setProgress, setElapsed } = useVoicePlayback(duration);
-  const [hasPlayed, setHasPlayed] = useState(played || false);
-
-  const togglePlay = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!hasPlayed && !isMe) setHasPlayed(true);
-    if(playing) {
-        setPlaying(false);
-    } else {
-        if(progress >= 1) {
-            setProgress(0);
-            setElapsed(0);
-        }
-        setPlaying(true);
-    }
-  };
-
-  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    const bounds = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - bounds.left;
-    const clickProgress = Math.max(0, Math.min(1, x / bounds.width));
-    setProgress(clickProgress);
-    setElapsed(clickProgress * duration);
-  };
-
-  const displayTime = playing ? Math.ceil(duration - elapsed) : duration;
-  const mins = Math.floor(displayTime / 60);
-  const secs = Math.floor(displayTime % 60).toString().padStart(2, '0');
-
-  // Colors
-  const playBtnBg = isMe ? 'bg-white text-purple-600' : 'bg-white/20 text-white backdrop-blur-md';
-  const playedBarColor = isMe ? 'bg-white' : 'bg-white';
-  const unplayedBarColor = isMe ? 'bg-white/30' : 'bg-white/20';
+  const { duration, uri } = message;
+  // Fallback to a public audio file if no uri is present
+  const audioSrc = uri || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
   return (
-    <div className="flex flex-col p-2 min-w-[220px]">
-      <div className="flex items-center gap-3">
-        {/* Play Button */}
-        <button 
-          onClick={togglePlay}
-          className={`relative w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-md ${playBtnBg}`}
-        >
-          {playing ? <Pause size={20} className={isMe ? 'fill-current' : ''} /> : <Play size={20} className={isMe ? 'fill-current ml-0.5' : 'ml-0.5'} />}
-          {!hasPlayed && !isMe && !playing && (
-            <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#1A1A24]" />
-          )}
-        </button>
-
-        {/* Waveform & Time */}
-        <div className="flex-1 flex flex-col gap-1.5">
-          <div 
-            className="flex items-center gap-0.5 h-6 cursor-pointer opacity-90 hover:opacity-100 transition-opacity"
-            onClick={handleSeek}
-          >
-            {waveform.map((val: number, i: number) => {
-              const isPlayed = (i / waveform.length) <= progress;
-              return (
-                <div 
-                  key={i}
-                  className={`w-1 rounded-full ${isPlayed ? playedBarColor : unplayedBarColor}`}
-                  style={{ height: `${Math.max(15, val * 100)}%`, transition: 'background-color 0.1s' }}
-                />
-              );
-            })}
-          </div>
-          <div className="flex justify-between items-center px-1">
-             <span className="text-[11px] font-mono text-white/80 select-none">
-               {mins}:{secs}
-             </span>
-             <button 
-               onClick={cycleSpeed}
-               className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full select-none ${
-                 speed === 1 ? 'bg-white/10 text-white/80' : 
-                 speed === 1.5 ? 'bg-white/80 text-purple-600' : 
-                 'bg-neon-purple text-white shadow-[0_0_8px_rgba(176,38,255,0.6)]'
-               }`}
-             >
-               {speed}x
-             </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AudioWaveformPlayer
+      src={audioSrc}
+      duration={duration}
+      isMe={isMe}
+      barCount={40}
+    />
   );
 };
 const defaultSentGradient = 'linear-gradient(135deg, #7B2FF7, #B026FF)';
