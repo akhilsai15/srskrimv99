@@ -6,7 +6,7 @@ import {
   MoreHorizontal, Plus, Image as ImageIcon, Video, RefreshCw, Send, ChevronLeft, ChevronRight,
   Hash, Tag, Repeat,
 } from 'lucide-react';
-import { saveRecord, getAllRecords, deleteRecord } from '../lib/services/mediaStorage';
+import { saveRecord, getAllRecords, deleteRecord, compressImage } from '../lib/services/mediaStorage';
 import { assembleVibesFeed, getDefaultMood, MOODS, MOCK_USERS, type VibePost } from '../lib/mock/skrimAlgorithm';
 import { PulseSendSheet } from '../components/PulseSheets';
 import { incrementStat } from '../lib/mock/achievementEngine';
@@ -1545,8 +1545,14 @@ function VibeCreateSheet({ isOpen, onClose, currentUser, onPost }: {
     } else {
       setMediaLimitWarning(null);
       const r = new FileReader();
-      r.onload = () => {
-        setMediaUrl(r.result as string);
+      r.onload = async () => {
+        let rawUrl = r.result as string;
+        try {
+          rawUrl = await compressImage(rawUrl);
+        } catch (err) {
+          console.error("Failed to compress image:", err);
+        }
+        setMediaUrl(rawUrl);
         setMediaKind(kind);
         setPostType(kind);
         setBgColor(null);

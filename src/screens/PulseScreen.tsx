@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AvatarWithRing } from '../components/ui';
-import { saveRecord, getAllRecords, deleteRecord } from '../lib/services/mediaStorage';
+import { saveRecord, getAllRecords, deleteRecord, compressImage } from '../lib/services/mediaStorage';
 import {
   Heart, MessageCircle, Bookmark, MoreHorizontal, Zap,
   SmilePlus, RefreshCw, X, Play, ChevronLeft, ChevronRight,
@@ -1967,11 +1967,22 @@ function PulseCreateSheet({ isOpen, onClose, currentUser, onPost, onSchedule, dr
               });
           };
         } else {
-          resolve({
-            id: `m_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-            url: fileUrl,
-            kind: 'image',
-          });
+          compressImage(fileUrl)
+            .then(compressedUrl => {
+              resolve({
+                id: `m_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+                url: compressedUrl,
+                kind: 'image',
+              });
+            })
+            .catch((err) => {
+              console.error("Failed to compress image:", err);
+              resolve({
+                id: `m_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+                url: fileUrl,
+                kind: 'image',
+              });
+            });
         }
       };
       r.readAsDataURL(f);

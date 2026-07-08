@@ -4,6 +4,7 @@ import { X, Type, Camera, Image as ImageIcon, Sparkles, Wand2, Plus, Globe, User
 import { SKRIM_REACTIONS, mockUsers } from '../lib/mock/mockData';
 import { MusicPicker } from './MusicPicker';
 import { useCloseFriends } from '../lib/mock/mockSocialGraph';
+import { compressImage } from '../lib/services/mediaStorage';
 
 interface SparkCreatorProps {
   isOpen: boolean;
@@ -310,11 +311,21 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const isVideo = file.type.startsWith('video');
+
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
+      let rawUrl = event.target?.result as string;
+      if (!isVideo) {
+        try {
+          rawUrl = await compressImage(rawUrl);
+        } catch (err) {
+          console.error("Failed to compress image:", err);
+        }
+      }
       setSelectedMedia({
-        type: file.type.startsWith('video') ? 'video' : 'image',
-        url: event.target?.result as string,
+        type: isVideo ? 'video' : 'image',
+        url: rawUrl,
         file: file
       });
       setMode('media');
