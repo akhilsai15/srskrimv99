@@ -50,7 +50,7 @@ export function StepCreative({ format, creativeId, headline, ctaText, onSelectCr
               onClick={() => onSelectCreative(c.id)}
               className={`relative aspect-square rounded-xl overflow-hidden border-2 ${creativeId === c.id ? 'border-neon-purple' : 'border-transparent'}`}
             >
-              <img src={c.thumbnail} alt="" className="w-full h-full object-cover" />
+              <img src={c.thumbnail || null} alt="" className="w-full h-full object-cover" />
               {creativeId === c.id && <div className="absolute inset-0 bg-neon-purple/20" />}
             </button>
           ))}
@@ -65,7 +65,7 @@ export function StepCreative({ format, creativeId, headline, ctaText, onSelectCr
       {selected && (
         <>
           <div className="bg-skrim-surface rounded-2xl border border-white/5 p-3 flex items-center gap-3">
-            <img src={selected.thumbnail} alt="" className="w-12 h-12 rounded-xl object-cover" />
+            <img src={selected.thumbnail || null} alt="" className="w-12 h-12 rounded-xl object-cover" />
             <div>
               <p className="text-sm font-semibold text-white">{selected.title}</p>
               <p className="text-[11px] text-gray-500">{formatCompact(selected.views)} existing views</p>
@@ -94,7 +94,7 @@ export function StepCreative({ format, creativeId, headline, ctaText, onSelectCr
                   <p className="text-[9px] text-gray-500 uppercase">Sponsored</p>
                 </div>
               </div>
-              <img src={selected.thumbnail} alt="" className="w-full aspect-video object-cover" />
+              <img src={selected.thumbnail || null} alt="" className="w-full aspect-video object-cover" />
               <div className="p-3 flex items-center justify-between">
                 <p className="text-[13px] font-semibold text-white truncate flex-1">{headline || selected.title}</p>
                 <button className="ml-2 px-3 py-1.5 bg-white/10 text-white text-[11px] font-bold rounded-lg shrink-0">{ctaText}</button>

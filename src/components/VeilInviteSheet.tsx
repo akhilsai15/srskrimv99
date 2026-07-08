@@ -195,7 +195,7 @@ export function VeilInviteSheet({ isOpen, onClose, onSendInvite }: VeilInviteShe
                     <div className="flex items-center gap-3">
                       {contact.avatar ? (
                         <img 
-                          src={contact.avatar} 
+                          src={contact.avatar || null} 
                           alt={contact.name} 
                           referrerPolicy="no-referrer"
                           className="w-9 h-9 rounded-full object-cover border border-white/10" 

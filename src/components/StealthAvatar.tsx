@@ -57,7 +57,7 @@ export function StealthAvatar({ onClick, className = "w-8 h-8 rounded-full borde
   return (
     <div className="relative group cursor-pointer inline-block" onClick={handleClick}>
       <img
-        src={currentUser?.avatar || "https://i.pravatar.cc/150?img=11"}
+        src={currentUser?.avatar || "https://i.pravatar.cc/150?img=11" || null}
         alt="Profile"
         className={className}
       />

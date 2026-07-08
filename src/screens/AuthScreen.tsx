@@ -871,7 +871,7 @@ export default function AuthScreen() {
                     }`}
                  >
                     {avatarBase64 ? (
-                      <img src={avatarBase64} alt="Avatar Preview" className="w-full h-full object-cover rounded-full" />
+                      <img src={avatarBase64 || null} alt="Avatar Preview" className="w-full h-full object-cover rounded-full" />
                     ) : (
                       <span className="text-[#B026FF] text-sm font-medium">+ Add photo</span>
                     )}

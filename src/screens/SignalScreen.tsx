@@ -246,7 +246,7 @@ export default function SignalScreen() {
                  <span className="text-[10px] text-neon-purple font-medium">{notif.time}</span>
               </div>
               {notif.thumbnail && (
-                <img src={notif.thumbnail} alt="vibe-thumb" className="w-12 h-16 rounded-md object-cover shadow-md ml-2 border border-white/10" />
+                <img src={notif.thumbnail || null} alt="vibe-thumb" className="w-12 h-16 rounded-md object-cover shadow-md ml-2 border border-white/10" />
               )}
            </div>
         ))}

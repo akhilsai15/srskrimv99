@@ -141,7 +141,7 @@ export function PulseCommentsSheet({
                   </div>
                 ) : (
                   <>
-                    <img src={currentUser?.avatar || 'https://i.pravatar.cc/150?u=you'} alt="You" className="w-9 h-9 rounded-full object-cover" />
+                    <img src={currentUser?.avatar || 'https://i.pravatar.cc/150?u=you' || null} alt="You" className="w-9 h-9 rounded-full object-cover" />
                     <div className="flex-1 bg-white/5 border border-white/10 rounded-full flex items-center px-4 py-2 focus-within:border-white/30 focus-within:bg-white/10 transition-colors relative">
                       <input
                         type="text" value={commentInput} onChange={e => setCommentInput(e.target.value)}
@@ -422,7 +422,7 @@ export function PulseReshareSheet({
                   </div>
                   <div className="flex items-center gap-3 p-3 rounded-2xl border border-white/10 bg-white/5">
                     {(post.image || post.images?.[0]) && (
-                      <img src={post.image || post.images?.[0]} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                      <img src={post.image || post.images?.[0] || null} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
                     )}
                     <div className="min-w-0">
                       <div className="text-white text-sm font-semibold truncate">{post.user}</div>
@@ -1013,7 +1013,7 @@ export function PulseSendSheet({
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-white/10">
-                            <img src={u.avatar} alt={u.displayName} className="w-full h-full object-cover" />
+                            <img src={u.avatar || null} alt={u.displayName} className="w-full h-full object-cover" />
                           </div>
                           <div>
                             <div className="text-white font-semibold flex items-center gap-1.5">

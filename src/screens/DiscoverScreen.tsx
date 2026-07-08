@@ -134,7 +134,7 @@ function CreatorFollowRow({ creator, onClick }: { creator: any, onClick: () => v
       className="flex items-center justify-between p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/10 transition-all cursor-pointer group"
     >
       <div className="flex items-center gap-3">
-         <img src={creator.avatar} className="w-10 h-10 rounded-full border border-white/10 bg-[#151520] object-cover" />
+         <img src={creator.avatar || null} className="w-10 h-10 rounded-full border border-white/10 bg-[#151520] object-cover" />
          <div className="flex flex-col">
             <div className="flex items-center gap-1">
               <span className="text-white font-bold text-sm tracking-tight leading-none group-hover:text-[#00F0FF] transition-colors">{creator.name}</span>
@@ -344,7 +344,7 @@ function SearchResultsSection({ query, onClose, onSearch }: { query: string, onC
                 >
                    {s.type === 'text' && <Search className="w-4 h-4 text-white/40" />}
                    {s.type === 'hashtag' && <Hash className="w-4 h-4 text-pink-400" />}
-                   {s.type === 'creator' && <img src={s.image} className="w-5 h-5 rounded-full object-cover" />}
+                   {s.type === 'creator' && <img src={s.image || null} className="w-5 h-5 rounded-full object-cover" />}
                    {s.type === 'world' && <Globe className="w-4 h-4 text-[#00F0FF]" />}
                    
                    <span className="text-white text-sm font-medium">
@@ -1305,7 +1305,7 @@ function LeaderboardSection({ loading }: { loading: boolean, key?: any }) {
                {top3[1] && (
                  <div onClick={() => navigate(`/profile/${top3[1].username}`)} className="flex flex-col items-center gap-2 cursor-pointer pb-2 group w-[30%]">
                    <div className="relative">
-                      <img src={top3[1].avatar} className="w-14 h-14 rounded-full border-2 border-gray-300 object-cover group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(209,213,219,0.3)]" />
+                      <img src={top3[1].avatar || null} className="w-14 h-14 rounded-full border-2 border-gray-300 object-cover group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(209,213,219,0.3)]" />
                       <div className="absolute -bottom-2 -right-2 text-xl drop-shadow-md">🥈</div>
                    </div>
                    <div className="flex flex-col items-center text-center w-full">
@@ -1318,7 +1318,7 @@ function LeaderboardSection({ loading }: { loading: boolean, key?: any }) {
                {top3[0] && (
                  <div onClick={() => navigate(`/profile/${top3[0].username}`)} className="flex flex-col items-center gap-2 cursor-pointer pb-8 group w-[40%]">
                    <div className="relative">
-                      <img src={top3[0].avatar} className="w-20 h-20 rounded-full border-2 border-yellow-400 object-cover group-hover:scale-105 transition-transform shadow-[0_0_20px_rgba(250,204,21,0.4)]" />
+                      <img src={top3[0].avatar || null} className="w-20 h-20 rounded-full border-2 border-yellow-400 object-cover group-hover:scale-105 transition-transform shadow-[0_0_20px_rgba(250,204,21,0.4)]" />
                       <div className="absolute -bottom-3 -right-2 text-3xl drop-shadow-lg">🥇</div>
                    </div>
                    <div className="flex flex-col items-center text-center w-full">
@@ -1331,7 +1331,7 @@ function LeaderboardSection({ loading }: { loading: boolean, key?: any }) {
                {top3[2] && (
                  <div onClick={() => navigate(`/profile/${top3[2].username}`)} className="flex flex-col items-center gap-2 cursor-pointer group w-[30%]">
                    <div className="relative pb-0 sm:pb-2">
-                      <img src={top3[2].avatar} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-amber-700 object-cover group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(180,83,9,0.3)]" />
+                      <img src={top3[2].avatar || null} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-amber-700 object-cover group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(180,83,9,0.3)]" />
                       <div className="absolute -bottom-2 -right-2 text-xl drop-shadow-md">🥉</div>
                    </div>
                    <div className="flex flex-col items-center text-center w-full">

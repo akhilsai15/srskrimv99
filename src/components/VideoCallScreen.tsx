@@ -287,7 +287,7 @@ export default function VideoCallScreen() {
             <div className="absolute inset-0 flex items-center justify-center">
               {store.contact?.avatar ? (
                 <img
-                  src={store.contact.avatar}
+                  src={store.contact.avatar || null}
                   className="w-24 h-24 lg:w-32 lg:h-32 rounded-full shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                 />
               ) : (
@@ -387,7 +387,7 @@ export default function VideoCallScreen() {
             <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl flex flex-col items-center shadow-2xl relative z-10 w-64">
               {store.contact?.avatar ? (
                 <img
-                  src={store.contact.avatar}
+                  src={store.contact.avatar || null}
                   className="w-20 h-20 rounded-full shadow-lg border-2 border-white/50 mb-4"
                 />
               ) : (
@@ -449,7 +449,7 @@ export default function VideoCallScreen() {
             >
               {store.contact?.avatar ? (
                 <img
-                  src={store.contact.avatar}
+                  src={store.contact.avatar || null}
                   className="w-24 h-24 rounded-full shadow-lg border-2 border-white/50 mb-6"
                 />
               ) : (
@@ -811,7 +811,7 @@ export default function VideoCallScreen() {
                 className="flex items-center gap-2.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-lg"
               >
                 <div className="relative">
-                  <img src={contact.avatar || ""} className="w-8 h-8 rounded-full border border-white/20 object-cover" />
+                  <img src={contact.avatar || null} className="w-8 h-8 rounded-full border border-white/20 object-cover" />
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-black" />
                 </div>
                 <span className="text-white text-xs font-semibold pr-1">{contact.name}</span>
@@ -1006,7 +1006,7 @@ export default function VideoCallScreen() {
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <img
-                            src={user.avatar}
+                            src={user.avatar || null}
                             alt={user.name}
                             className="w-10 h-10 rounded-full object-cover border border-white/10"
                           />

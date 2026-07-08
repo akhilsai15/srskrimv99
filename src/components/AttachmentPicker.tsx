@@ -194,7 +194,7 @@ export function AttachmentPicker({ onSendPhoto, onSendVideo, onSendFile, onSendS
             <div className="flex-1 flex flex-col p-4 items-center overflow-y-auto pb-32">
                {selectedItem.isUpload ? (
                  <img
-                   src={selectedItem.uri}
+                   src={selectedItem.uri || null}
                    alt="preview"
                    className="w-full max-w-[280px] aspect-[4/5] rounded-xl object-cover mb-4 transition-all duration-300"
                    style={{

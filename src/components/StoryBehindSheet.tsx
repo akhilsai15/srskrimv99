@@ -45,7 +45,7 @@ export function StoryBehindSheet({
              <div className="flex gap-4">
                 <div className="w-12 pt-1 flex flex-col items-center">
                   <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10">
-                    <img src={post?.avatar} alt={post?.user} className="w-full h-full object-cover" />
+                    <img src={post?.avatar || null} alt={post?.user} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 w-px bg-white/10 my-2" />
                 </div>

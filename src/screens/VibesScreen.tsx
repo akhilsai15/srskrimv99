@@ -1654,7 +1654,7 @@ function VibeCreateSheet({ isOpen, onClose, currentUser, onPost }: {
               {/* User row */}
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10 shrink-0">
-                  <img src={currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80'} alt="" className="w-full h-full object-cover" />
+                  <img src={currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80' || null} alt="" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-white font-semibold text-sm">{currentUser?.username || 'You'}</span>
               </div>
@@ -1770,9 +1770,9 @@ function VibeCreateSheet({ isOpen, onClose, currentUser, onPost }: {
                     <div className="flex flex-col gap-2">
                       <div className="relative w-full aspect-[16/10] max-h-[30vh] rounded-2xl overflow-hidden bg-black border border-white/10 shadow-inner">
                         {mediaKind === 'video' ? (
-                          <video ref={previewVideoRef} src={mediaUrl} className="w-full h-full object-cover" controls muted={!useOriginalAudio} />
+                          <video ref={previewVideoRef} src={mediaUrl || null} className="w-full h-full object-cover" controls muted={!useOriginalAudio} />
                         ) : (
-                          <img src={mediaUrl} alt="" className="w-full h-full object-cover" />
+                          <img src={mediaUrl || null} alt="" className="w-full h-full object-cover" />
                         )}
                         <button
                           type="button"

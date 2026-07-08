@@ -100,12 +100,12 @@ function SwipeableChatRow({ chat, onClick }: { chat: any, onClick: any, key?: Re
                 >
                     {chat.isGroup ? (
                         <div className="relative w-full h-full">
-                            <img src={chat.avatar2} className="w-8 h-8 rounded-full absolute top-0 right-0 border-2 border-[#0A0A12] bg-zinc-800" />
-                            <img src={chat.avatar} className="w-8 h-8 rounded-full absolute bottom-0 left-0 border-2 border-[#0A0A12] bg-zinc-700" />
+                            <img src={chat.avatar2 || null} className="w-8 h-8 rounded-full absolute top-0 right-0 border-2 border-[#0A0A12] bg-zinc-800" />
+                            <img src={chat.avatar || null} className="w-8 h-8 rounded-full absolute bottom-0 left-0 border-2 border-[#0A0A12] bg-zinc-700" />
                         </div>
                     ) : (
                         <>
-                            <img src={chat.avatar} className="w-full h-full rounded-full bg-white/10" />
+                            <img src={chat.avatar || null} className="w-full h-full rounded-full bg-white/10" />
                             {chat.online && (
                                 <div className="absolute right-0 bottom-0 w-3.5 h-3.5 bg-emerald-500 rounded-full border-[2.5px] border-[#0A0A12]" />
                             )}
@@ -708,7 +708,7 @@ export default function ConnectScreen() {
                     >
                       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black/95 z-10" />
                       <img 
-                        src={currentUser?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=You"} 
+                        src={currentUser?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=You" || null} 
                         className={`absolute inset-0 w-full h-full object-cover transition-opacity ${userStory ? 'opacity-40 group-hover/story:opacity-60' : 'opacity-25 group-hover/story:opacity-40'}`} 
                         alt="Your avatar"
                       />
@@ -718,7 +718,7 @@ export default function ConnectScreen() {
                         {userStory ? (
                           <div className="relative w-9 h-9">
                             <div className="absolute inset-[-2px] rounded-full border-2 border-[#B026FF]/80 shadow-[0_0_8px_rgba(176,38,255,0.5)] animate-pulse" style={{ animationDuration: '2.5s' }} />
-                            <img src={currentUser?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=You"} className="w-full h-full rounded-full border border-black/50 object-cover relative z-10 bg-zinc-800" alt="You" />
+                            <img src={currentUser?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=You" || null} className="w-full h-full rounded-full border border-black/50 object-cover relative z-10 bg-zinc-800" alt="You" />
                           </div>
                         ) : (
                           <div className="w-9 h-9 rounded-full border-2 border-[#B026FF] flex items-center justify-center bg-[#B026FF]/20 relative shadow-[0_0_12px_rgba(176,38,255,0.4)]">
@@ -793,7 +793,7 @@ export default function ConnectScreen() {
                               title="View Profile"
                             >
                               <div className="absolute inset-[-2px] rounded-full border-2 border-emerald-400/80 shadow-[0_0_8px_rgba(52,211,153,0.5)] animate-pulse" style={{ animationDuration: '2.5s' }} />
-                              <img src={contact.avatar} className="w-full h-full rounded-full border border-black/50 object-cover relative z-10 bg-zinc-800" alt={contact.name} />
+                              <img src={contact.avatar || null} className="w-full h-full rounded-full border border-black/50 object-cover relative z-10 bg-zinc-800" alt={contact.name} />
                               <div className="absolute right-0 bottom-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[#161622] z-20" />
                             </div>
                           </div>
@@ -954,7 +954,7 @@ export default function ConnectScreen() {
                     }}
                     title="View Profile"
                   >
-                    <img src={person.avatar} alt={person.name} className="w-12 h-12 rounded-full object-cover" />
+                    <img src={person.avatar || null} alt={person.name} className="w-12 h-12 rounded-full object-cover" />
                     {person.online && (
                       <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-400 border-2 border-skrim-bg" />
                     )}
@@ -1450,7 +1450,7 @@ function StoryViewerOverlay({ story, onClose, onDelete, onReply, onReact }: Stor
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={story.avatar} className="w-10 h-10 rounded-full object-cover border border-white/20" alt={story.name} />
+            <img src={story.avatar || null} className="w-10 h-10 rounded-full object-cover border border-white/20" alt={story.name} />
             <div>
               <div className="text-white font-extrabold text-sm">{story.name}</div>
               <div className="text-white/50 text-[11px] font-mono">@{story.username}</div>

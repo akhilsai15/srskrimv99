@@ -125,7 +125,7 @@ export function AudienceTab() {
         <div className="flex flex-col gap-3">
           {topFans.map((fan) => (
             <button key={fan.name} onClick={() => navigate(`/profile/${fan.name.toLowerCase()}`)} className="flex items-center gap-3 text-left">
-              <img src={fan.avatar} alt="" className="w-10 h-10 rounded-full object-cover" />
+              <img src={fan.avatar || null} alt="" className="w-10 h-10 rounded-full object-cover" />
               <div className="flex-1">
                 <p className="text-sm font-semibold text-white">{fan.name}</p>
                 <p className="text-[11px] text-gray-500">{fan.interactions} interactions</p>

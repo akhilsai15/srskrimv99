@@ -25,7 +25,7 @@ export function NearbyUserCard({ user, status, onOpenIcebreaker, onOpenProfile }
           aria-label={`View ${user.nickname} profile`}
         >
           <img
-            src={user.avatar}
+            src={user.avatar || null}
             alt={user.nickname}
             className={`w-14 h-14 rounded-full object-cover border-2 ${
               revealed ? 'border-neon-purple' : 'border-white/10'

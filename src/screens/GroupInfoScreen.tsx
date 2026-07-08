@@ -1291,7 +1291,7 @@ export default function GroupInfoScreen() {
         <div className="flex flex-col items-center pt-8 pb-6 bg-[#0A0A0C]">
           <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-500 to-red-500 border border-white/10 flex items-center justify-center text-5xl mb-4 shadow-lg shadow-orange-500/20 overflow-hidden">
             {group.avatar.startsWith('http') || group.avatar.startsWith('data:image/') ? (
-              <img src={group.avatar} alt={group.name} className="w-full h-full object-cover" />
+              <img src={group.avatar || null} alt={group.name} className="w-full h-full object-cover" />
             ) : (
               group.avatar
             )}
@@ -1834,7 +1834,7 @@ export default function GroupInfoScreen() {
                   <div className="flex gap-3 items-center mb-4 p-3 bg-white/5 border border-white/5 rounded-xl">
                     <div className="w-16 h-16 rounded-xl bg-[#252530] border border-white/10 flex items-center justify-center text-3xl overflow-hidden shrink-0">
                       {editAvatar.startsWith('http') || editAvatar.startsWith('data:image/') ? (
-                        <img src={editAvatar} alt="Group Avatar" className="w-full h-full object-cover" />
+                        <img src={editAvatar || null} alt="Group Avatar" className="w-full h-full object-cover" />
                       ) : (
                         editAvatar
                       )}

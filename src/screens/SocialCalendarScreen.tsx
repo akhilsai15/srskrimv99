@@ -385,7 +385,7 @@ export default function SocialCalendarScreen() {
             {todayEvents.map(ev => (
               <div key={ev.id} className="flex items-center gap-3">
                 {ev.avatar
-                  ? <img src={ev.avatar} className="w-8 h-8 rounded-full object-cover border-2 border-yellow-400/50" />
+                  ? <img src={ev.avatar || null} className="w-8 h-8 rounded-full object-cover border-2 border-yellow-400/50" />
                   : <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center text-base">
                       {ev.type === 'birthday' ? '🎂' : ev.type === 'anniversary' ? '💖' : '⭐'}
                     </div>
@@ -455,7 +455,7 @@ export default function SocialCalendarScreen() {
                     <div className="flex items-start gap-3">
                       {/* Avatar or icon */}
                       {ev.avatar
-                        ? <img src={ev.avatar} className="w-11 h-11 rounded-full object-cover shrink-0" />
+                        ? <img src={ev.avatar || null} className="w-11 h-11 rounded-full object-cover shrink-0" />
                         : <div className={`w-11 h-11 rounded-full flex items-center justify-center text-xl shrink-0 ${
                             ev.type === 'birthday' ? 'bg-pink-500/20' : ev.type === 'anniversary' ? 'bg-red-500/20' : 'bg-yellow-500/20'
                           }`}>

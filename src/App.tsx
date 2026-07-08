@@ -317,7 +317,7 @@ function MainAppLayout() {
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-700 to-gray-800 border border-white/10 overflow-hidden shrink-0">
                       <img
-                        src={c.img}
+                        src={c.img || null}
                         alt={c.name}
                         className="w-full h-full object-cover"
                       />

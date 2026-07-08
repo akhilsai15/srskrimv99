@@ -561,7 +561,7 @@ export function MusicPicker({ isOpen, onClose, onSelect, currentMusic, context =
 
                     <audio
                       ref={uploadAudioRef}
-                      src={uploadedFile.url}
+                      src={uploadedFile.url || null}
                       onLoadedMetadata={() => setUploadDuration(uploadAudioRef.current?.duration || 0)}
                     />
 

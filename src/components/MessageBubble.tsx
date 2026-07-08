@@ -313,7 +313,7 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
                 {message.linkPreview.image && (
                   <div className="w-full h-32 overflow-hidden bg-white/5">
                     <img
-                      src={message.linkPreview.image}
+                      src={message.linkPreview.image || null}
                       alt={message.linkPreview.title}
                       className="w-full h-full object-cover"
                       onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
@@ -502,7 +502,7 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
             {/* Thumbnail */}
             <div className="relative w-full aspect-[3/4] overflow-hidden">
               <img
-                src={message.sparkThumbnail}
+                src={message.sparkThumbnail || null}
                 alt=""
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -524,7 +524,7 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
 
               {/* User info bottom of thumbnail */}
               <div className="absolute bottom-2 left-2 right-2 flex items-center gap-2">
-                <img src={message.sparkUser.avatar} alt="" className="w-6 h-6 rounded-full border border-white/40 object-cover" />
+                <img src={message.sparkUser.avatar || null} alt="" className="w-6 h-6 rounded-full border border-white/40 object-cover" />
                 <span className="text-white text-xs font-bold truncate drop-shadow">{message.sparkUser.user}</span>
               </div>
             </div>
@@ -564,19 +564,19 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
                      }));
                    }}>
                 <img
-                  src={message.postThumbnail}
+                  src={message.postThumbnail || null}
                   alt=""
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
                 <div className="absolute bottom-2 left-2 right-2 flex items-center gap-2">
-                  <img src={message.postUser.avatar} alt="" className="w-6 h-6 rounded-full border border-white/40 object-cover" />
+                  <img src={message.postUser.avatar || null} alt="" className="w-6 h-6 rounded-full border border-white/40 object-cover" />
                   <span className="text-white text-xs font-bold truncate drop-shadow">{message.postUser.user}</span>
                 </div>
               </div>
             ) : (
               <div className="p-3 flex items-center gap-2 bg-black/20">
-                <img src={message.postUser.avatar} alt="" className="w-6 h-6 rounded-full object-cover" />
+                <img src={message.postUser.avatar || null} alt="" className="w-6 h-6 rounded-full object-cover" />
                 <span className="text-white text-xs font-bold truncate">{message.postUser.user}</span>
               </div>
             )}
@@ -641,7 +641,7 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
              >
                 {message.photo.uri ? (
                   <img 
-                    src={message.photo.uri} 
+                    src={message.photo.uri || null} 
                     alt="Uploaded media" 
                     className="w-full h-full object-cover"
                     style={{ 
@@ -693,7 +693,7 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
              >
                 {message.video.uri ? (
                   <video 
-                    src={message.video.uri} 
+                    src={message.video.uri || null} 
                     className="w-full h-full object-cover" 
                     muted 
                     playsInline 
@@ -821,7 +821,7 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
         return (
           <div className="p-1">
             <img 
-              src={message.imageUrl} 
+              src={message.imageUrl || null} 
               alt="Shared image" 
               className="rounded-xl w-full max-w-[240px] object-cover bg-white/5" 
             />
@@ -834,7 +834,7 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
         return (
           <div className="p-3 rounded-2xl bg-white/[0.06] border border-white/10 w-[240px]">
             <div className="flex items-center gap-3 mb-3">
-              <img src={message.contact.avatar} alt={message.contact.displayName} className="w-12 h-12 rounded-full object-cover border border-white/10 shrink-0" />
+              <img src={message.contact.avatar || null} alt={message.contact.displayName} className="w-12 h-12 rounded-full object-cover border border-white/10 shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="text-white font-bold text-sm truncate">{message.contact.displayName}</div>
                 <div className="text-white/50 text-xs truncate">@{message.contact.handle}</div>
@@ -898,7 +898,7 @@ export function MessageBubble({ message, isConsecutiveTop, isConsecutiveBottom, 
     <div {...wrapperProps}>
        {!isMe && message.senderAvatar && !isConsecutiveTop && (
           <div className="flex flex-col items-center mr-2 w-8 h-8 rounded-full overflow-visible shrink-0 self-end mb-1 relative">
-              <img src={message.senderAvatar} className="w-8 h-8 rounded-full bg-white/10" />
+              <img src={message.senderAvatar || null} className="w-8 h-8 rounded-full bg-white/10" />
               {message.senderIsAdmin && (
                  <div className="absolute -bottom-1 -right-1 bg-[#1A1A24] rounded-full p-[2px] border-2 border-[#1A1A24]">
                     <Crown size={10} className="text-yellow-500 fill-yellow-500" />

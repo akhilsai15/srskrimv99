@@ -158,7 +158,7 @@ export function DashboardSidebar() {
        >
           <div className="relative">
              <div className={`w-9 h-9 rounded-full ${frameClasses}`}>
-                <img src={currentUser?.avatar || "https://i.pravatar.cc/150?img=11"} alt="avatar" className="w-full h-full object-cover rounded-full border border-[#141414]" />
+                <img src={currentUser?.avatar || "https://i.pravatar.cc/150?img=11" || null} alt="avatar" className="w-full h-full object-cover rounded-full border border-[#141414]" />
              </div>
              {isCurrentUserOnline && <div className="absolute bottom-0 right-0 w-[10px] h-[10px] bg-[#00FF64] rounded-full border-[2px] border-[#0A0A0A] z-10" />}
           </div>

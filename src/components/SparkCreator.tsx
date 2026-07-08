@@ -475,7 +475,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
                     }}
                     className="w-full flex items-center gap-3 p-3 text-left hover:bg-white/10 transition-colors border-b border-white/5 active:bg-white/20"
                   >
-                    <img src={user.avatar} alt={user.displayName} className="w-10 h-10 rounded-full border border-white/20" />
+                    <img src={user.avatar || null} alt={user.displayName} className="w-10 h-10 rounded-full border border-white/20" />
                     <div className="flex flex-col">
                       <span className="text-white font-bold leading-tight flex items-center gap-1">
                         @{user.username}
@@ -660,7 +660,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
                                className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-white/5 transition-colors text-left"
                              >
                                 <div className="flex items-center gap-2">
-                                  <img src={u.avatar} alt="avatar" className="w-6 h-6 rounded-full object-cover" />
+                                  <img src={u.avatar || null} alt="avatar" className="w-6 h-6 rounded-full object-cover" />
                                   <span className="text-xs font-semibold text-white">{u.username}</span>
                                 </div>
                                 <Plus className="w-4 h-4 text-white/50" />
@@ -694,7 +694,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
              <>
                <video 
                  ref={mediaVideoRef} 
-                 src={selectedMedia.url} 
+                 src={selectedMedia.url || null} 
                  className="w-full h-full object-cover" 
                  autoPlay 
                  playsInline 
@@ -710,7 +710,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
              </>
           ) : (
              <>
-               <img src={selectedMedia?.url} alt="Selected" className="w-full h-full object-cover" style={{
+               <img src={selectedMedia?.url || null} alt="Selected" className="w-full h-full object-cover" style={{
                  filter: [
                    activeFilter === 'vivid' ? 'saturate(1.8) contrast(1.1)' : '',
                    activeFilter === 'fade' ? 'brightness(1.1) saturate(0.7) contrast(0.9)' : '',
@@ -751,7 +751,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
                    style={{ left: u.position.x + '%', top: u.position.y + '%' }}
                  >
                    <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
-                     {u.avatar ? <img src={u.avatar} className="w-full h-full object-cover"/> : '👤'}
+                     {u.avatar ? <img src={u.avatar || null} className="w-full h-full object-cover"/> : '👤'}
                    </div>
                    <span className="text-white">{u.username.replace('@', '')}</span>
                    <span className="ml-1 cursor-pointer opacity-50 hover:opacity-100 text-white/50" onClick={() => setImageTaggedUsers(prev => prev.filter(x => x.username !== u.username))}>✕</span>
@@ -868,7 +868,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
                     <button key={f.id} onClick={() => setActiveFilter(f.id)}
                       className={`flex flex-col items-center gap-1 rounded-xl border p-1 overflow-hidden transition-all ${activeFilter === f.id ? 'border-[#B026FF] scale-105' : 'border-white/10 hover:border-white/30'}`}>
                       <div className="w-full h-14 rounded-lg overflow-hidden bg-white/5">
-                        <img src={selectedMedia?.url} alt={f.label} className="w-full h-full object-cover" style={{ filter: f.preview }} />
+                        <img src={selectedMedia?.url || null} alt={f.label} className="w-full h-full object-cover" style={{ filter: f.preview }} />
                       </div>
                       <span className="text-[9px] text-white/60 font-bold pb-1">{f.label}</span>
                     </button>
@@ -1014,7 +1014,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
                           onClick={() => handleSelectSuggestion(user.username.replace('@', ''))}
                           className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors text-left"
                         >
-                          <img src={user.avatar} className="w-8 h-8 rounded-full border border-[#B026FF]/30 object-cover" />
+                          <img src={user.avatar || null} className="w-8 h-8 rounded-full border border-[#B026FF]/30 object-cover" />
                           <span className="text-sm font-bold text-white">{user.username}</span>
                         </button>
                       ))}
@@ -1108,7 +1108,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
                           className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/5 transition-colors text-left border border-transparent hover:border-white/5"
                         >
                            <div className="flex items-center gap-3">
-                             <img src={u.avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover shadow-sm bg-black border border-white/10" />
+                             <img src={u.avatar || null} alt="avatar" className="w-10 h-10 rounded-full object-cover shadow-sm bg-black border border-white/10" />
                              <span className="text-sm font-bold text-white">{u.username}</span>
                            </div>
                            <Plus className="w-5 h-5 text-[#3B82F6]" />
@@ -1156,7 +1156,7 @@ export function SparkCreator({ isOpen, onClose, onPost, respondingToChallenge, r
                    }
                    setShowUserSearch(false);
                 }} className="flex items-center gap-4 p-4 hover:bg-white/5 rounded-2xl transition-colors text-left border border-transparent hover:border-white/5">
-                  <img src={u.avatar} className="w-12 h-12 rounded-full border border-white/10 shadow-md bg-black object-cover" />
+                  <img src={u.avatar || null} className="w-12 h-12 rounded-full border border-white/10 shadow-md bg-black object-cover" />
                   <span className="font-bold text-base text-white">{u.username}</span>
                 </button>
               ))}

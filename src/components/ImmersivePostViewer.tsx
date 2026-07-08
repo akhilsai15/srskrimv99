@@ -524,7 +524,7 @@ export function ImmersivePostViewer({ initialIndex, type, urls, user, users, onC
            }}
         >
           <div className="w-10 h-10 rounded-full p-[2px] bg-gradient-to-br from-[#B026FF] to-[#00F0FF] group-hover:scale-110 transition-transform">
-            <img src={author?.avatar || 'https://i.pravatar.cc/150'} alt="Avatar" className="w-full h-full rounded-full border-2 border-black object-cover" />
+            <img src={author?.avatar || 'https://i.pravatar.cc/150' || null} alt="Avatar" className="w-full h-full rounded-full border-2 border-black object-cover" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -858,7 +858,7 @@ export function ImmersivePostViewer({ initialIndex, type, urls, user, users, onC
                         {comments.slice(-2).map(c => (
                           <div key={c.id} className="flex items-center gap-3">
                             <img 
-                              src={c.avatar || 'https://i.pravatar.cc/150'} 
+                              src={c.avatar || 'https://i.pravatar.cc/150' || null} 
                               className="w-6 h-6 rounded-full border border-white/10 cursor-pointer" 
                               alt="user" 
                               onClick={() => {
@@ -891,7 +891,7 @@ export function ImmersivePostViewer({ initialIndex, type, urls, user, users, onC
                 {comments.slice(-2).map(c => (
                   <div key={c.id} className="flex items-center gap-3">
                     <img 
-                      src={c.avatar || 'https://i.pravatar.cc/150'} 
+                      src={c.avatar || 'https://i.pravatar.cc/150' || null} 
                       className="w-6 h-6 rounded-full border border-white/10 cursor-pointer" 
                       alt="user" 
                       onClick={() => {
@@ -965,7 +965,7 @@ export function ImmersivePostViewer({ initialIndex, type, urls, user, users, onC
                 {comments.map((comment) => (
                   <div key={comment.id} className="flex gap-3">
                     <img 
-                      src={comment.avatar || 'https://i.pravatar.cc/150'} 
+                      src={comment.avatar || 'https://i.pravatar.cc/150' || null} 
                       alt="avatar" 
                       className="w-8 h-8 rounded-full object-cover shrink-0 cursor-pointer" 
                       onClick={() => {
@@ -1001,7 +1001,7 @@ export function ImmersivePostViewer({ initialIndex, type, urls, user, users, onC
               </div>
 
               <div className="p-4 bg-black/40 border-t border-white/10 shrink-0 flex gap-3 items-center">
-                 <img src={user?.avatar || 'https://i.pravatar.cc/150'} alt="me" className="w-9 h-9 rounded-full object-cover border border-white/20" />
+                 <img src={user?.avatar || 'https://i.pravatar.cc/150' || null} alt="me" className="w-9 h-9 rounded-full object-cover border border-white/20" />
                  <input 
                     type="text"
                     value={commentInput}

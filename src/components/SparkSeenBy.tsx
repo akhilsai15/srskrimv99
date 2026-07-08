@@ -33,7 +33,7 @@ export function SparkSeenBy({ viewers, totalViews, onViewProfile }: SparkSeenByP
             {stackPreview.map((v, i) => (
               <img
                 key={v.id}
-                src={v.avatar}
+                src={v.avatar || null}
                 alt=""
                 className="w-7 h-7 rounded-full object-cover border-2 border-[#0A0A0A]"
                 style={{ zIndex: stackPreview.length - i }}
@@ -66,7 +66,7 @@ export function SparkSeenBy({ viewers, totalViews, onViewProfile }: SparkSeenByP
                   onClick={() => onViewProfile?.(v.username.replace('@', ''))}
                   className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-left"
                 >
-                  <img src={v.avatar} alt="" className="w-9 h-9 rounded-full object-cover" />
+                  <img src={v.avatar || null} alt="" className="w-9 h-9 rounded-full object-cover" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
                       <span className="text-white text-[13px] font-semibold truncate">{v.displayName}</span>

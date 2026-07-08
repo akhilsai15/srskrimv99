@@ -96,7 +96,7 @@ export function ChatHeader({
               }
             >
               <img 
-                src={avatar} 
+                src={avatar || null} 
                 alt={name} 
                 className="w-9 h-9 rounded-full object-cover border-2 border-[rgba(10,10,18,0.95)] block"
               />

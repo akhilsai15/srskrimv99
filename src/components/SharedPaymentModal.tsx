@@ -145,7 +145,7 @@ export function SharedPaymentModal({
                 {/* Preview card */}
                 <div className="bg-gradient-to-br from-[#1A1A24] to-[#111] rounded-2xl p-4 border border-white/5 shadow-xl mb-6 flex gap-4 items-center">
                   {preview.thumbnail ? (
-                    <img src={preview.thumbnail} alt="" className="w-14 h-14 rounded-xl object-cover shrink-0" />
+                    <img src={preview.thumbnail || null} alt="" className="w-14 h-14 rounded-xl object-cover shrink-0" />
                   ) : (
                     <div className="w-14 h-14 rounded-xl border border-white/10 flex items-center justify-center text-2xl bg-gradient-to-br from-[#1A1A1A] to-[#0A0A0A] shrink-0">
                       {preview.emoji || '💸'}

@@ -894,7 +894,7 @@ function PostCard({
             {post.imageUrl && (
               <div className="mt-3 rounded-xl overflow-hidden border border-white/10 bg-black/30">
                 <img
-                  src={post.imageUrl}
+                  src={post.imageUrl || null}
                   alt="Post Attachment"
                   referrerPolicy="no-referrer"
                   className="w-full h-auto max-h-[420px] object-cover hover:scale-[1.01] transition-transform duration-300"
@@ -904,7 +904,7 @@ function PostCard({
             {post.videoUrl && (
               <div className="mt-3 rounded-xl overflow-hidden border border-white/10 bg-black/30">
                 <video
-                  src={post.videoUrl}
+                  src={post.videoUrl || null}
                   controls
                   className="w-full h-auto max-h-[420px] object-contain"
                 />
@@ -1740,7 +1740,7 @@ function Composer({
               <div className="relative rounded-xl overflow-hidden border border-white/10 bg-black/40">
                 {attachedImage && (
                   <img
-                    src={attachedImage}
+                    src={attachedImage || null}
                     alt="Attached preview"
                     className="w-full h-auto max-h-[180px] object-cover"
                     referrerPolicy="no-referrer"
@@ -1748,7 +1748,7 @@ function Composer({
                 )}
                 {attachedVideo && (
                   <video
-                    src={attachedVideo}
+                    src={attachedVideo || null}
                     controls
                     className="w-full h-auto max-h-[180px] object-contain"
                   />
@@ -1906,7 +1906,7 @@ function Composer({
                           className="relative h-12 rounded-lg overflow-hidden border border-white/10 hover:border-white/30 transition-all active:scale-95 group"
                           title={img.label}
                         >
-                          <img src={img.url} alt={img.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                          <img src={img.url || null} alt={img.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                             <span className="text-[8px] font-black text-white tracking-wide uppercase px-1 bg-black/50 rounded">{img.label}</span>
                           </div>

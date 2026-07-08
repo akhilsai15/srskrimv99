@@ -49,7 +49,7 @@ export function LaunchCeremony({ draft, onViewCampaign }: LaunchCeremonyProps) {
         className="w-full max-w-sm bg-skrim-surface rounded-2xl border border-white/10 p-5 mb-8 text-left relative z-10"
       >
         <div className="flex gap-3 items-center mb-3">
-          {content && <img src={content.thumbnail} alt="" className="w-12 h-12 rounded-xl object-cover" />}
+          {content && <img src={content.thumbnail || null} alt="" className="w-12 h-12 rounded-xl object-cover" />}
           <div>
             <p className="font-bold text-white text-sm">{content?.title}</p>
             <p className="text-[11px] text-gray-500 capitalize">{draft.format} Ad</p>

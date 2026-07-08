@@ -60,7 +60,7 @@ export default function PremiumManageScreen() {
           <div className="flex flex-col gap-3">
             {content.map((c) => (
               <div key={c.id} className="bg-skrim-surface rounded-2xl border border-white/5 p-3 flex gap-3 items-center">
-                <img src={c.thumbnail} alt="" className="w-14 h-14 rounded-xl object-cover shrink-0" />
+                <img src={c.thumbnail || null} alt="" className="w-14 h-14 rounded-xl object-cover shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-white truncate">{c.title}</p>
                   <p className="text-[11px] text-gray-500">₹{c.price} to unlock · {c.unlocks} unlocks</p>
@@ -89,7 +89,7 @@ export default function PremiumManageScreen() {
                     onClick={() => setPickedId(c.id)}
                     className={`relative rounded-xl overflow-hidden border-2 ${pickedId === c.id ? 'border-neon-purple' : 'border-transparent'}`}
                   >
-                    <img src={c.thumbnail} alt="" className="w-full aspect-square object-cover" />
+                    <img src={c.thumbnail || null} alt="" className="w-full aspect-square object-cover" />
                     {pickedId === c.id && (
                       <div className="absolute top-1 right-1 w-5 h-5 bg-neon-purple rounded-full flex items-center justify-center">
                         <Check className="w-3 h-3 text-white" />

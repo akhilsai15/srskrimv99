@@ -176,7 +176,7 @@ export default function SubscriptionsManageScreen() {
             <div className="bg-skrim-surface rounded-2xl border border-white/5 p-4 flex flex-col gap-3">
               {SUBSCRIPTION_CONFIG.subscribers.map((s) => (
                 <div key={s.name} className="flex items-center gap-3">
-                  <img src={s.avatar} alt="" className="w-9 h-9 rounded-full object-cover" />
+                  <img src={s.avatar || null} alt="" className="w-9 h-9 rounded-full object-cover" />
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-white">{s.name}</p>
                     <p className="text-[11px] text-gray-500">Since {s.since}</p>

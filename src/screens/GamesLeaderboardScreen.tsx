@@ -159,7 +159,7 @@ export default function GamesLeaderboardScreen() {
                         <div className="flex flex-col items-center">
                             <div className="relative mb-2">
                                 <span className="absolute -top-3 -left-3 text-2xl z-10">🥈</span>
-                                <img src={topThree[1].avatar} alt="" className="w-16 h-16 rounded-full border-4 border-slate-300 shadow-[0_0_20px_rgba(203,213,225,0.4)]" />
+                                <img src={topThree[1].avatar || null} alt="" className="w-16 h-16 rounded-full border-4 border-slate-300 shadow-[0_0_20px_rgba(203,213,225,0.4)]" />
                             </div>
                             <span className="font-bold text-sm text-white/90 truncate w-20 text-center">{topThree[1].playerName}</span>
                             <span className="text-slate-300 font-mono font-bold text-xs">{topThree[1].score.toLocaleString()}</span>
@@ -170,7 +170,7 @@ export default function GamesLeaderboardScreen() {
                         <div className="flex flex-col items-center -mt-8">
                             <div className="relative mb-2">
                                 <span className="absolute -top-6 -left-4 text-4xl z-10 drop-shadow-[0_0_15px_rgba(251,191,36,0.8)] filter">👑</span>
-                                <img src={topThree[0].avatar} alt="" className="w-20 h-20 rounded-full border-4 border-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.6)]" />
+                                <img src={topThree[0].avatar || null} alt="" className="w-20 h-20 rounded-full border-4 border-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.6)]" />
                             </div>
                             <span className="font-black text-amber-400 text-lg truncate w-24 text-center">{topThree[0].playerName}</span>
                             <span className="text-amber-400 font-mono font-black text-sm">{topThree[0].score.toLocaleString()} pts</span>
@@ -181,7 +181,7 @@ export default function GamesLeaderboardScreen() {
                         <div className="flex flex-col items-center">
                             <div className="relative mb-2">
                                 <span className="absolute -top-3 -left-1 text-2xl z-10">🥉</span>
-                                <img src={topThree[2].avatar} alt="" className="w-14 h-14 rounded-full border-4 border-orange-700 shadow-[0_0_20px_rgba(194,65,12,0.4)]" />
+                                <img src={topThree[2].avatar || null} alt="" className="w-14 h-14 rounded-full border-4 border-orange-700 shadow-[0_0_20px_rgba(194,65,12,0.4)]" />
                             </div>
                             <span className="font-bold text-xs text-white/80 truncate w-16 text-center">{topThree[2].playerName}</span>
                             <span className="text-orange-400 font-mono font-bold text-[10px]">{topThree[2].score.toLocaleString()}</span>
@@ -195,7 +195,7 @@ export default function GamesLeaderboardScreen() {
                     {restOfList.map((score, idx) => (
                         <div key={idx} className="flex items-center gap-4 bg-white/5 hover:bg-white/10 p-3 rounded-2xl border border-white/5 transition-colors">
                             <div className="w-8 text-center text-white/40 font-black text-lg">#{idx + 4}</div>
-                            <img src={score.avatar} alt="" className="w-10 h-10 rounded-full border border-white/10" />
+                            <img src={score.avatar || null} alt="" className="w-10 h-10 rounded-full border border-white/10" />
                             <div className="flex-1 min-w-0">
                                 <h4 className="font-bold text-white truncate">{score.playerName}</h4>
                             </div>

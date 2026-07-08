@@ -208,7 +208,7 @@ function TextPost({ post, onLike, onComment, onShare, onSave, onReact, navigate,
       {hasMusic && (
         <audio
           ref={audioRef}
-          src={post.music.url}
+          src={post.music.url || null}
           muted={muted}
           playsInline
         />
@@ -683,7 +683,7 @@ function MultiImagePost({ post, onLike, onComment, onShare, onSave, onReact, nav
         {hasMusic && (
           <audio
             ref={audioRef}
-            src={post.music.url}
+            src={post.music.url || null}
             muted={muted}
             playsInline
           />
@@ -961,8 +961,8 @@ function VideoThumbPost({ post, onLike, onComment, onShare, onSave, onReact, nav
       >
         <video
           ref={videoRef}
-          src={post.videoSrc || "https://www.w3schools.com/html/mov_bbb.mp4"}
-          poster={isLocalVideo ? undefined : post.image}
+          src={post.videoSrc || "https://www.w3schools.com/html/mov_bbb.mp4" || null}
+          poster={isLocalVideo ? undefined : post.image || undefined}
           loop
           muted={muted}
           playsInline
@@ -1160,12 +1160,12 @@ function ImagePost({ post, onLike, onComment, onShare, onSave, onReact, navigate
         {hasMusic && (
           <audio
             ref={audioRef}
-            src={post.music.url}
+            src={post.music.url || null}
             muted={muted}
             playsInline
           />
         )}
-        <img src={post.image} alt="" loading="lazy"
+        <img src={post.image || null} alt="" loading="lazy"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none" />
         
         {/* Music Badge with Play/Mute controls */}
@@ -1259,12 +1259,12 @@ function PulseBattleCard({ post, onVote }: any) {
       <h4 className="px-4 text-white font-bold text-base pb-3">{post.title}</h4>
       <div className="flex relative">
         <div className="w-1/2 relative">
-          <img src={post.image1} alt="A" className="w-full aspect-[4/5] object-cover" />
+          <img src={post.image1 || null} alt="A" className="w-full aspect-[4/5] object-cover" />
           <div className="absolute bottom-2 left-2 bg-black/70 rounded px-2 py-1 text-xs text-white font-bold">{post.user1.handle}</div>
         </div>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/90 border border-white/20 rounded-full w-9 h-9 flex items-center justify-center text-white font-black text-xs z-10">VS</div>
         <div className="w-1/2 relative">
-          <img src={post.image2} alt="B" className="w-full aspect-[4/5] object-cover" />
+          <img src={post.image2 || null} alt="B" className="w-full aspect-[4/5] object-cover" />
           <div className="absolute bottom-2 right-2 bg-black/70 rounded px-2 py-1 text-xs text-white font-bold">{post.user2.handle}</div>
         </div>
       </div>
@@ -1307,7 +1307,7 @@ function SuggestedUserCard({ post }: any) {
         <SmilePlus className="w-3.5 h-3.5" /> Suggested for you
       </div>
       <div className="flex items-center gap-4">
-        <img src={post.user?.avatar} alt="" className="w-14 h-14 rounded-full object-cover border-2 border-[#B026FF]/30" />
+        <img src={post.user?.avatar || null} alt="" className="w-14 h-14 rounded-full object-cover border-2 border-[#B026FF]/30" />
         <div className="flex-1">
           <span className="text-white font-bold block">{post.user?.user}</span>
           <span className="text-gray-400 text-sm">{post.user?.handle}</span>
@@ -1339,8 +1339,8 @@ function CollabPost({ post, onLike, navigate }: any) {
     <div className="flex flex-col gap-3 pb-6 border-b border-white/5">
       <div className="flex items-center gap-3 px-4">
         <div className="flex -space-x-3">
-          <img src={post.user1.avatar} className="w-10 h-10 rounded-full border-2 border-[#121212] z-10 object-cover" alt="" />
-          <img src={post.user2.avatar} className="w-10 h-10 rounded-full border-2 border-[#121212] z-0 object-cover" alt="" />
+          <img src={post.user1.avatar || null} className="w-10 h-10 rounded-full border-2 border-[#121212] z-10 object-cover" alt="" />
+          <img src={post.user2.avatar || null} className="w-10 h-10 rounded-full border-2 border-[#121212] z-0 object-cover" alt="" />
         </div>
         <div>
           <span className="font-semibold text-white text-sm">{post.user1.handle} & {post.user2.handle}</span>
@@ -1348,9 +1348,9 @@ function CollabPost({ post, onLike, navigate }: any) {
         </div>
       </div>
       <div className="w-full relative aspect-square flex border-y border-white/10 overflow-hidden">
-        <img src={post.image1} alt="" className="w-1/2 object-cover" />
+        <img src={post.image1 || null} alt="" className="w-1/2 object-cover" />
         <div className="w-px h-full bg-gradient-to-b from-[#B026FF] via-[#B026FF]/50 to-transparent absolute left-1/2 z-10" />
-        <img src={post.image2} alt="" className="w-1/2 object-cover" />
+        <img src={post.image2 || null} alt="" className="w-1/2 object-cover" />
       </div>
       <div className="px-4 text-sm flex items-start gap-2">
         <span className="font-bold text-white shrink-0">Collab:</span>
@@ -1439,7 +1439,7 @@ function TagPeopleSheet({ selected, onToggle, onClose }: {
                 onClick={() => onToggle(u)}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors"
               >
-                <img src={u.avatar} alt="" className="w-10 h-10 rounded-full object-cover" />
+                <img src={u.avatar || null} alt="" className="w-10 h-10 rounded-full object-cover" />
                 <div className="flex-1 text-left">
                   <div className="text-white text-sm font-semibold">{u.user}</div>
                   <div className="text-white/40 text-xs">{u.handle}</div>
@@ -2153,9 +2153,9 @@ function PulseCreateSheet({ isOpen, onClose, currentUser, onPost, onSchedule, dr
                     {media.map(item => (
                       <div key={item.id} className={`relative rounded-xl overflow-hidden bg-black ${media.length === 1 && item.kind === 'video' ? 'aspect-video' : 'aspect-square'}`}>
                         {item.kind === 'video' ? (
-                          <video ref={previewVideoRef} src={item.url} className="w-full h-full object-cover" controls />
+                          <video ref={previewVideoRef} src={item.url || null} className="w-full h-full object-cover" controls />
                         ) : (
-                          <img src={item.url} alt="" className="w-full h-full object-cover" />
+                          <img src={item.url || null} alt="" className="w-full h-full object-cover" />
                         )}
                         <button
                           onClick={() => removeMedia(item.id)}
@@ -2532,7 +2532,7 @@ function ScheduledPulsesSheet({ isOpen, onClose, scheduled, onCancel }: {
               ) : scheduled.map(s => (
                 <div key={s.id} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-3">
                   {s.post?.image ? (
-                    <img src={s.post.image} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
+                    <img src={s.post.image || null} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
                   ) : (
                     <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
                       <Hash className="w-5 h-5 text-white/30" />
@@ -2609,7 +2609,7 @@ function DraftsSheet({ isOpen, onClose, drafts, onResume, onDelete }: {
                     className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-3 text-left hover:bg-white/[0.07] transition-colors"
                   >
                     {thumb ? (
-                      <img src={thumb} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
+                      <img src={thumb || null} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
                     ) : d.bgColor ? (
                       <div className="w-12 h-12 rounded-xl shrink-0" style={{ backgroundColor: d.bgColor }} />
                     ) : d.pollOptions?.length ? (

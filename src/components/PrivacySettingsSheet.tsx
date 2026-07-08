@@ -545,7 +545,7 @@ export const PrivacySettingsSheet = ({ onClose }: Props) => {
               ) : followRequests.map(req => (
                 <div key={req.id} className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/5">
                   <img
-                    src={req.fromAvatar || `https://i.pravatar.cc/150?u=${req.fromUsername}`}
+                    src={req.fromAvatar || `https://i.pravatar.cc/150?u=${req.fromUsername || null}`}
                     alt={req.fromUsername}
                     className="w-11 h-11 rounded-full object-cover border border-white/10"
                   />

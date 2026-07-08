@@ -191,7 +191,7 @@ function CampaignCard({
       className={`bg-skrim-surface rounded-2xl border overflow-hidden ${isRejected ? 'border-l-4 border-l-red-500 border-y border-y-white/5 border-r border-r-white/5' : 'border-white/5'}`}
     >
       <div className="p-4 flex gap-3">
-        <img src={c.thumbnail} alt="" className="w-14 h-14 rounded-xl object-cover shrink-0" />
+        <img src={c.thumbnail || null} alt="" className="w-14 h-14 rounded-xl object-cover shrink-0" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 mb-1">
             <p className="text-sm font-semibold text-white truncate">{c.title}</p>

@@ -113,7 +113,7 @@ function ContentCard({ item, expanded, onToggle, onBoost }: { item: ContentItem;
   return (
     <div className="bg-skrim-surface rounded-2xl border border-white/5 overflow-hidden">
       <div className="p-3 flex gap-3">
-        <img src={item.thumbnail} alt="" className="w-16 h-16 rounded-xl object-cover shrink-0" />
+        <img src={item.thumbnail || null} alt="" className="w-16 h-16 rounded-xl object-cover shrink-0" />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-white truncate">{item.title}</p>
           <p className="text-[11px] text-gray-500 mb-1.5">{item.postedAgo}</p>

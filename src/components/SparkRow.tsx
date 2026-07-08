@@ -68,7 +68,7 @@ export function SparkRow({ sparks, onSparkClick, onAddSpark, currentUser, active
             <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#B026FF] p-[2px]">
               <div className="w-full h-full rounded-full overflow-hidden bg-[#1F1F1F]">
                 {user?.avatar || user?.avatarUrl ? (
-                  <img src={user.avatar || user.avatarUrl} alt="You" className="w-full h-full object-cover" />
+                  <img src={user.avatar || user.avatarUrl || null} alt="You" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[#B026FF] text-white font-bold text-lg">
                     {user?.fullName ? user.fullName.split(' ').map((n: string) => n[0]).join('') : 'U'}
@@ -80,7 +80,7 @@ export function SparkRow({ sparks, onSparkClick, onAddSpark, currentUser, active
             <div className="absolute inset-0 rounded-full p-[3px] bg-gradient-to-tr from-[#B026FF] to-[#00F0FF]" style={{ animation: 'spin 3s linear infinite' }}>
               <div className="w-full h-full rounded-full bg-[#121212] overflow-hidden border-2 border-[#121212]" style={{ animation: 'spin 3s linear infinite reverse' }}>
                 {user?.avatar || user?.avatarUrl ? (
-                  <img src={user.avatar || user.avatarUrl} alt="You" className="w-full h-full object-cover" />
+                  <img src={user.avatar || user.avatarUrl || null} alt="You" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[#B026FF] text-white font-bold text-lg">
                     {user?.fullName ? user.fullName.split(' ').map((n: string) => n[0]).join('') : 'U'}
@@ -158,12 +158,12 @@ export function SparkRow({ sparks, onSparkClick, onAddSpark, currentUser, active
                   <div className={`relative w-[60px] h-[36px] flex items-center justify-start mt-2 mb-2 ${latestSpark.status === 'pending' ? 'opacity-60' : ''}`}>
                     <div className={`w-[36px] h-[36px] rounded-full p-[2px] ${latestSpark.status === 'pending' ? 'border-2 border-dashed border-white/40 bg-transparent' : ringClass} absolute left-0 z-10`} style={latestSpark.status === 'pending' ? {} : ringStyle}>
                       <div className="w-full h-full rounded-full bg-[#121212] overflow-hidden border border-[#121212]" style={{ animation: hasViewed ? 'none' : `spin ${getEnergyAnimationDuration(sparkEnergy)} linear infinite reverse` }}>
-                        <img src={latestSpark.creator?.avatar || spark.user?.avatar} alt="Creator" className="w-full h-full object-cover" />
+                        <img src={latestSpark.creator?.avatar || spark.user?.avatar || null} alt="Creator" className="w-full h-full object-cover" />
                       </div>
                     </div>
                     <div className={`w-[36px] h-[36px] rounded-full p-[2px] ${latestSpark.status === 'pending' ? 'border-2 border-dashed border-white/40 bg-transparent' : ringClass} absolute left-[24px] z-20`} style={latestSpark.status === 'pending' ? {} : ringStyle}>
                       <div className="w-full h-full rounded-full bg-[#121212] overflow-hidden border border-[#121212]" style={{ animation: hasViewed ? 'none' : `spin ${getEnergyAnimationDuration(sparkEnergy)} linear infinite reverse` }}>
-                        <img src={latestSpark.collabPartner?.avatar} alt="Partner" className="w-full h-full object-cover" />
+                        <img src={latestSpark.collabPartner?.avatar || null} alt="Partner" className="w-full h-full object-cover" />
                       </div>
                     </div>
                     <div className={`absolute -bottom-2 -right-1 bg-[#121212] rounded-full px-1.5 py-0.5 border border-white/20 z-30 ${latestSpark.status === 'pending' ? 'text-[10px] text-white/70' : 'text-[10px]'}`}>
@@ -179,7 +179,7 @@ export function SparkRow({ sparks, onSparkClick, onAddSpark, currentUser, active
                      className={`w-full h-full rounded-full bg-[#121212] overflow-hidden border-2 border-[#121212] ${hasViewed ? 'opacity-50' : 'opacity-100'}`}
                      style={{ animation: hasViewed ? 'none' : `spin ${getEnergyAnimationDuration(sparkEnergy)} linear infinite reverse` }} // Reverse spin to keep image upright
                    >
-                     <img src={spark.user?.avatar} alt={spark.user?.displayName} className="w-full h-full object-cover" />
+                     <img src={spark.user?.avatar || null} alt={spark.user?.displayName} className="w-full h-full object-cover" />
                    </div>
                  </div>
                )}

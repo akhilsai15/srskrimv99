@@ -108,7 +108,7 @@ export default function TipsManageScreen() {
           <div className="bg-skrim-surface rounded-2xl border border-white/5 p-4 flex flex-col gap-3">
             {TIPS_CONFIG.topTippers.map((t) => (
               <div key={t.name} className="flex items-center gap-3">
-                <img src={t.avatar} alt="" className="w-9 h-9 rounded-full object-cover" />
+                <img src={t.avatar || null} alt="" className="w-9 h-9 rounded-full object-cover" />
                 <span className="flex-1 text-sm font-semibold text-white">{t.name}</span>
                 <span className="text-sm font-bold text-[#D4AF37]">₹{t.total}</span>
               </div>
@@ -122,7 +122,7 @@ export default function TipsManageScreen() {
           <div className="flex flex-col gap-2">
             {TIPS_CONFIG.recentTips.map((t, i) => (
               <div key={i} className="bg-skrim-surface rounded-2xl border border-white/5 p-3 flex items-center gap-3">
-                <img src={t.avatar} alt="" className="w-9 h-9 rounded-full object-cover shrink-0" />
+                <img src={t.avatar || null} alt="" className="w-9 h-9 rounded-full object-cover shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-white"><span className="font-bold">{t.name}</span> tipped ₹{t.amount}</p>
                   {t.message && <p className="text-[12px] text-gray-400 truncate">"{t.message}"</p>}

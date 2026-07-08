@@ -167,7 +167,7 @@ export function SparkThumbnail({ spark, className = "w-full h-full object-cover"
   return (
     <div className="relative w-full h-full">
       <img
-        src={thumbUrl}
+        src={thumbUrl || null}
         alt="Preview frame"
         className={className}
         referrerPolicy="no-referrer"
@@ -1650,7 +1650,7 @@ export function SparkViewer({
                         <>
                           <video
                             ref={videoRef}
-                            src={spark.video || "https://www.w3schools.com/html/mov_bbb.mp4"}
+                            src={spark.video || "https://www.w3schools.com/html/mov_bbb.mp4" || null}
                             className="w-full h-full object-cover"
                             autoPlay={isActive}
                             muted={isMuted || !!(spark.audioUrl || spark.music_url)}
@@ -1691,7 +1691,7 @@ export function SparkViewer({
                                   {images.map((img: string, idx: number) => (
                                     <div key={idx} className="w-full h-full flex-shrink-0 relative">
                                       <img
-                                        src={img}
+                                        src={img || null}
                                         alt={`spark-${idx}`}
                                         className="w-full h-full object-cover pointer-events-none"
                                       />
@@ -1734,7 +1734,7 @@ export function SparkViewer({
                       ) : (
                         <div className="relative w-full h-full">
                           <img
-                            src={spark.image}
+                            src={spark.image || null}
                             alt="spark"
                             className="w-full h-full object-cover"
                           />
@@ -1762,7 +1762,7 @@ export function SparkViewer({
                       {(spark?.audioUrl || spark?.music_url) && (
                         <audio
                           ref={audioRef}
-                          src={spark.audioUrl || spark.music_url}
+                          src={spark.audioUrl || spark.music_url || null}
                           loop={false}
                           preload="auto"
                           muted={isMuted}
@@ -1857,13 +1857,13 @@ export function SparkViewer({
                         />
                       ) : spark.isCollab ? (
                         <div className="relative w-[52px] h-[36px] flex items-center shrink-0">
-                          <img src={spark.creator?.avatar || group.user?.avatar} alt="Creator" className="absolute left-0 w-[36px] h-[36px] rounded-full object-cover border-2 border-[#121212] z-10" />
-                          <img src={spark.collabPartner?.avatar} alt="Partner" className="absolute left-[16px] w-[36px] h-[36px] rounded-full object-cover border-2 border-[#121212] z-20" />
+                          <img src={spark.creator?.avatar || group.user?.avatar || null} alt="Creator" className="absolute left-0 w-[36px] h-[36px] rounded-full object-cover border-2 border-[#121212] z-10" />
+                          <img src={spark.collabPartner?.avatar || null} alt="Partner" className="absolute left-[16px] w-[36px] h-[36px] rounded-full object-cover border-2 border-[#121212] z-20" />
                         </div>
                       ) : (
                         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#121212] shrink-0 shadow-lg bg-[#B026FF] flex items-center justify-center text-white font-bold text-sm">
                           <img
-                            src={group.user?.avatar || group.user?.avatarUrl}
+                            src={group.user?.avatar || group.user?.avatarUrl || null}
                             alt="avatar"
                             className="w-full h-full object-cover"
                             onError={(e) => {
@@ -2362,7 +2362,7 @@ export function SparkViewer({
                                       {previewViewers.map((v, i) => (
                                         <img
                                           key={`${spark.id}_viewer_${v.id}_${i}`}
-                                          src={v.avatar}
+                                          src={v.avatar || null}
                                           alt=""
                                           className="w-6 h-6 rounded-full object-cover border-2 border-black/60"
                                           style={{ zIndex: previewViewers.length - i }}
@@ -2688,7 +2688,7 @@ export function SparkViewer({
                               className="flex items-start gap-2.5 bg-white/5 border border-white/5 rounded-xl p-2.5"
                             >
                               <img
-                                src={reply.user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${reply.user?.username || 'user'}`}
+                                src={reply.user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${reply.user?.username || 'user' || null}`}
                                 alt=""
                                 className="w-6 h-6 rounded-full object-cover border border-white/10 shrink-0"
                               />
@@ -2738,10 +2738,8 @@ export function SparkViewer({
                     <div className="flex gap-3 items-end mt-4">
                       <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 mt-2">
                         <img
-                          src={
-                            currentUser?.avatar ||
-                            "https://api.dicebear.com/7.x/avataaars/svg?seed=user"
-                          }
+                          src={currentUser?.avatar ||
+                            "https://api.dicebear.com/7.x/avataaars/svg?seed=user" || null}
                           alt="me"
                           className="w-full h-full object-cover"
                         />
@@ -2807,7 +2805,7 @@ export function SparkViewer({
                       <div className="flex gap-3 items-end">
                         <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 mt-2">
                           <img
-                            src={currentUser?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=user"}
+                            src={currentUser?.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=user" || null}
                             alt="me"
                             className="w-full h-full object-cover"
                           />
@@ -3366,7 +3364,7 @@ export function SparkViewer({
                               className="flex items-start gap-2.5 bg-white/5 border border-white/5 rounded-xl p-2.5"
                             >
                               <img
-                                src={reply.user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${reply.user?.username || 'user'}`}
+                                src={reply.user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${reply.user?.username || 'user' || null}`}
                                 alt=""
                                 className="w-6 h-6 rounded-full object-cover border border-white/10 shrink-0"
                               />

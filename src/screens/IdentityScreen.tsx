@@ -805,7 +805,7 @@ export default function IdentityScreen() {
         {currentCover === 'none' ? (
           <div className="w-full h-full bg-gradient-to-br from-[#B026FF] to-[#00F0FF] opacity-80 animate-pulse" />
         ) : (
-          <img src={currentCover} alt="Cover" className="w-full h-full object-cover" />
+          <img src={currentCover || null} alt="Cover" className="w-full h-full object-cover" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-skrim-bg to-transparent opacity-80" />
         
@@ -831,7 +831,7 @@ export default function IdentityScreen() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#B026FF] to-[#00F0FF] rounded-full blur-[20px] opacity-60 animate-pulse" />
             <div className="relative w-[90px] h-[90px] rounded-full p-[3px] bg-gradient-to-br from-[#B026FF] to-[#00F0FF]">
               <img 
-                src={user.avatar || 'https://i.pravatar.cc/150'} 
+                src={user.avatar || 'https://i.pravatar.cc/150' || null} 
                 alt="Avatar" 
                 className="w-full h-full rounded-full border-4 border-skrim-bg object-cover bg-black"
                 onClick={() => avatarInputRef.current?.click()}
@@ -1138,7 +1138,7 @@ export default function IdentityScreen() {
                 onClick={(e) => e.stopPropagation()} 
               />
               <div className="w-16 h-16 rounded-full p-0.5 bg-gradient-to-br from-[#B026FF] to-[#00F0FF] mb-3">
-                <img src={mu.avatar} alt={mu.username} className="w-full h-full rounded-full border-2 border-skrim-bg object-cover" />
+                <img src={mu.avatar || null} alt={mu.username} className="w-full h-full rounded-full border-2 border-skrim-bg object-cover" />
               </div>
               <div className="flex items-center gap-1 w-full justify-center">
                  <p className="text-sm font-bold text-white text-center truncate">{mu.displayName}</p>
@@ -1285,7 +1285,7 @@ export default function IdentityScreen() {
                     <div className="w-full h-full relative overflow-hidden group/vid">
                       {url?.startsWith('data:video/') || (!post.thumbnail && !post.image && post.videoSrc) ? (
                         <video 
-                          src={post.videoSrc || url} 
+                          src={post.videoSrc || url || null} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                           muted 
                           playsInline
@@ -1370,14 +1370,14 @@ export default function IdentityScreen() {
                       </div>
                     ) : isVideo ? (
                       <video 
-                        src={vibe.videoSrc} 
+                        src={vibe.videoSrc || null} 
                         muted 
                         playsInline 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                       />
                     ) : (
                       <img 
-                        src={vibe.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80'} 
+                        src={vibe.thumbnail || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80' || null} 
                         alt="vibe thumbnail" 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                       />
@@ -1628,7 +1628,7 @@ export default function IdentityScreen() {
               <div className="flex flex-col gap-6 py-2">
                  <div className="flex flex-col items-center gap-3">
                    <div className="relative group cursor-pointer" onClick={() => modalAvatarInputRef.current?.click()}>
-                      <img src={editAvatar || 'https://i.pravatar.cc/150'} alt="Avatar" className="w-24 h-24 rounded-full object-cover border-2 border-white/20 group-hover:opacity-50 transition bg-black" />
+                      <img src={editAvatar || 'https://i.pravatar.cc/150' || null} alt="Avatar" className="w-24 h-24 rounded-full object-cover border-2 border-white/20 group-hover:opacity-50 transition bg-black" />
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40 rounded-full">
                          <Camera className="w-8 h-8 text-white" />
                       </div>
@@ -1642,7 +1642,7 @@ export default function IdentityScreen() {
                      onClick={() => modalCoverInputRef.current?.click()}
                    >
                      {editCover && editCover !== 'none' ? (
-                       <img src={editCover} alt="Cover" className="w-full h-full object-cover group-hover:opacity-50 transition" />
+                       <img src={editCover || null} alt="Cover" className="w-full h-full object-cover group-hover:opacity-50 transition" />
                      ) : (
                        <div className="w-full h-full bg-gradient-to-br from-[#B026FF] to-[#00F0FF] opacity-80 group-hover:opacity-50 transition" />
                      )}
@@ -2335,7 +2335,7 @@ function SparkArchiveSheet({ archivedByDay, onClose, onOpenDay }: {
                       style={!isImg ? { background: typeof coverImg === 'string' ? coverImg : 'linear-gradient(to bottom right, #B026FF, #00F0FF)' } : undefined}
                     >
                       {isImg ? (
-                        <img src={coverImg} alt="" className="w-full h-full object-cover" />
+                        <img src={coverImg || null} alt="" className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-white/70 text-xs font-semibold">{sparks.length} Spark{sparks.length !== 1 ? 's' : ''}</span>
                       )}

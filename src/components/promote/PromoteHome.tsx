@@ -37,7 +37,7 @@ export function PromoteHome({ onCreateAd, onViewCampaignDashboard }: PromoteHome
               const meta = STATUS_META[c.status];
               return (
                 <div key={c.id} className="bg-skrim-surface rounded-2xl border border-white/5 p-3 flex items-center gap-3">
-                  <img src={c.thumbnail} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
+                  <img src={c.thumbnail || null} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-white truncate">{c.title}</p>
                     <div className="flex items-center gap-2 mt-0.5">

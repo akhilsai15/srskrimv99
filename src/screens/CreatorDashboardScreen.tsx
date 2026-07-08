@@ -54,7 +54,7 @@ export default function CreatorDashboardScreen() {
         </div>
 
         <div className="flex items-center gap-3 mb-4">
-          <img src={user?.avatar || 'https://i.pravatar.cc/150'} alt="" className="w-10 h-10 rounded-full object-cover" />
+          <img src={user?.avatar || 'https://i.pravatar.cc/150' || null} alt="" className="w-10 h-10 rounded-full object-cover" />
           <div>
             <p className="text-sm font-bold text-white">{user?.fullName || user?.displayName || 'Rahul Mehta'}</p>
             <p className="text-[11px] text-gray-500">{user?.username || '@rahul_yt'}</p>

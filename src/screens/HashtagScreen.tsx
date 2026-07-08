@@ -144,9 +144,9 @@ export default function HashtagScreen() {
                 className="w-full aspect-[4/5] rounded-3xl bg-white/5 relative overflow-hidden group cursor-pointer shadow-lg border border-white/10"
               >
                 {topVibe.videoImageHover ? (
-                  <video src={topVibe.videoImageHover} poster={topVibe.avatar} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 pointer-events-none" autoPlay muted loop playsInline />
+                  <video src={topVibe.videoImageHover || null} poster={topVibe.avatar || undefined} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500 pointer-events-none" autoPlay muted loop playsInline />
                 ) : (
-                  <img src={topVibe.avatar} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                  <img src={topVibe.avatar || null} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
                 )}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
@@ -165,7 +165,7 @@ export default function HashtagScreen() {
 
                 <div className="absolute bottom-4 left-4 right-4 flex flex-col gap-2">
                   <div className="flex items-center gap-2">
-                     <img src={topVibe.avatar} className="w-8 h-8 rounded-full border border-white/20" />
+                     <img src={topVibe.avatar || null} className="w-8 h-8 rounded-full border border-white/20" />
                      <span className="text-white font-bold text-sm drop-shadow">{topVibe.handle}</span>
                   </div>
                   <CaptionWithHashtags caption={topVibe.caption} className="text-white text-sm font-medium drop-shadow-md leading-snug line-clamp-2" />
@@ -201,9 +201,9 @@ export default function HashtagScreen() {
                 className="aspect-[3/4] bg-[#151520] relative overflow-hidden group cursor-pointer"
               >
                 {vibe.videoImageHover ? (
-                  <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
+                  <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
                 ) : (
-                  <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+                  <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
                 )}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />

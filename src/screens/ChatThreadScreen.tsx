@@ -1080,7 +1080,7 @@ export default function ChatThreadScreen() {
                  <TransformWrapper>
                    <TransformComponent wrapperClass="!w-screen !h-screen flex items-center justify-center relative">
                      <img 
-                       src={mediaViewer.photoUrl} 
+                       src={mediaViewer.photoUrl || null} 
                        alt="Pulse Preview" 
                        className="max-w-full max-h-[85vh] object-contain select-none cursor-zoom-in" 
                      />
@@ -1092,7 +1092,7 @@ export default function ChatThreadScreen() {
                    <TransformWrapper>
                      <TransformComponent wrapperClass="!w-screen !h-screen flex items-center justify-center relative">
                        <img 
-                         src={mediaViewer.photo.uri} 
+                         src={mediaViewer.photo.uri || null} 
                          alt="Viewer" 
                          className="max-w-full max-h-[85vh] object-contain select-none cursor-zoom-in" 
                          style={{ filter: mediaViewer.photo.filter === 'Vivid' ? 'saturate(200%)' : mediaViewer.photo.filter === 'Cool' ? 'hue-rotate(90deg)' : mediaViewer.photo.filter === 'Warm' ? 'sepia(50%)' : 'none' }}
@@ -1112,7 +1112,7 @@ export default function ChatThreadScreen() {
                  mediaViewer.video.uri ? (
                    <div className="w-full flex-1 flex items-center justify-center relative max-h-[85vh]">
                      <video 
-                       src={mediaViewer.video.uri} 
+                       src={mediaViewer.video.uri || null} 
                        controls 
                        autoPlay 
                        loop 
@@ -1332,7 +1332,7 @@ export default function ChatThreadScreen() {
                 { userId: 'u3', displayName: 'Meera Nair', handle: 'meeranair', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=meera', mutualFriends: 8 },
               ].map(contact => (
                 <button key={contact.userId} onClick={() => { handleSendContact(contact); setShowContactPicker(false); }} className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors text-left">
-                  <img src={contact.avatar} alt={contact.displayName} className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0" />
+                  <img src={contact.avatar || null} alt={contact.displayName} className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0" />
                   <div>
                     <div className="text-white font-medium text-sm">{contact.displayName}</div>
                     <div className="text-white/50 text-xs">@{contact.handle} · {contact.mutualFriends} mutual</div>

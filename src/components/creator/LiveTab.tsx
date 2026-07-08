@@ -113,7 +113,7 @@ export function LiveTab({ onBoostNextStream }: LiveTabProps) {
           {giftLeaderboard.map((g, i) => (
             <div key={g.name} className="flex items-center gap-3">
               <span className="text-lg">{['🥇', '🥈', '🥉'][i]}</span>
-              <img src={g.avatar} alt="" className="w-9 h-9 rounded-full object-cover" />
+              <img src={g.avatar || null} alt="" className="w-9 h-9 rounded-full object-cover" />
               <span className="flex-1 text-sm font-semibold text-white">{g.name}</span>
               <span className="text-sm font-bold text-[#D4AF37]">₹{g.amount.toLocaleString()}</span>
             </div>

@@ -193,7 +193,7 @@ const OrbitingParticles = ({ isSpeaking, isSpeaker, addedContacts }: any) => {
           >
             {c.avatar ? (
               <img
-                src={c.avatar}
+                src={c.avatar || null}
                 alt={c.name}
                 className="w-full h-full object-cover"
               />
@@ -237,7 +237,7 @@ const AvatarRipples = ({
       <div className="relative w-[120px] h-[120px] rounded-full overflow-hidden shadow-[0_0_30px_rgba(176,38,255,0.6)] bg-[#111] z-10">
         {avatar ? (
           <img
-            src={avatar}
+            src={avatar || null}
             alt="avatar"
             className="w-full h-full object-cover"
           />
@@ -390,7 +390,7 @@ const AudioCallScreen = () => {
                 className="flex items-center gap-2.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-lg"
               >
                 <div className="relative">
-                  <img src={contact.avatar || ""} className="w-8 h-8 rounded-full border border-white/20 object-cover" />
+                  <img src={contact.avatar || null} className="w-8 h-8 rounded-full border border-white/20 object-cover" />
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border border-black" />
                 </div>
                 <span className="text-white text-xs font-semibold pr-1">{contact.name}</span>
@@ -479,7 +479,7 @@ const AudioCallScreen = () => {
             >
               {store.contact?.avatar ? (
                 <img
-                  src={store.contact.avatar}
+                  src={store.contact.avatar || null}
                   alt="avatar"
                   className="w-full h-full object-cover"
                 />
@@ -540,7 +540,7 @@ const AudioCallScreen = () => {
                 <div className="w-[100px] h-[100px] rounded-full overflow-hidden border-2 border-white shadow-[0_0_30px_#B026FF] bg-[#111]">
                   {store.contact?.avatar ? (
                     <img
-                      src={store.contact.avatar}
+                      src={store.contact.avatar || null}
                       alt="avatar"
                       className="w-full h-full object-cover"
                     />
@@ -891,7 +891,7 @@ const AudioCallScreen = () => {
                         >
                           <div className="flex items-center gap-3 min-w-0">
                             <img
-                              src={user.avatar}
+                              src={user.avatar || null}
                               alt={user.name}
                               className="w-10 h-10 rounded-full object-cover border border-white/10"
                             />

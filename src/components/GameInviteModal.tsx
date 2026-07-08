@@ -194,12 +194,12 @@ export function GameInviteModal({ isOpen, onClose, gameId, gameLabel, gameEmoji 
                       <div className="relative w-9 h-9 shrink-0">
                         {chat.isGroup ? (
                           <div className="relative w-full h-full">
-                            <img src={chat.avatar2} className="w-6 h-6 rounded-full absolute top-0 right-0 border border-black bg-zinc-800" />
-                            <img src={chat.avatar} className="w-6 h-6 rounded-full absolute bottom-0 left-0 border border-black bg-zinc-700" />
+                            <img src={chat.avatar2 || null} className="w-6 h-6 rounded-full absolute top-0 right-0 border border-black bg-zinc-800" />
+                            <img src={chat.avatar || null} className="w-6 h-6 rounded-full absolute bottom-0 left-0 border border-black bg-zinc-700" />
                           </div>
                         ) : (
                           <>
-                            <img src={chat.avatar} className="w-full h-full rounded-full bg-white/10" />
+                            <img src={chat.avatar || null} className="w-full h-full rounded-full bg-white/10" />
                             {chat.online && (
                               <div className="absolute right-0 bottom-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-[#0F0F1A]" />
                             )}

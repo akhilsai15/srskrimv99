@@ -143,7 +143,7 @@ export function OverviewTab({ rangeLabel, onViewAllContent, onSelectContent, has
               onClick={() => onSelectContent(c.id)}
               className="bg-skrim-surface rounded-2xl border border-white/5 p-3 flex gap-3 items-center text-left active:scale-[0.98] transition-transform"
             >
-              <img src={c.thumbnail} alt="" className="w-14 h-14 rounded-xl object-cover shrink-0" />
+              <img src={c.thumbnail || null} alt="" className="w-14 h-14 rounded-xl object-cover shrink-0" />
               <div className="flex-1 min-w-0">
                 {c.isTop && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold text-orange-400 mb-1">

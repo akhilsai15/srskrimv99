@@ -76,7 +76,7 @@ export default function PostDetailScreen() {
         </div>
 
         {thumbnail && (
-          <img src={thumbnail} alt="" className="w-full aspect-square object-cover" />
+          <img src={thumbnail || null} alt="" className="w-full aspect-square object-cover" />
         )}
 
         <div className="p-4">
