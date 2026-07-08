@@ -2603,10 +2603,10 @@ function DraftsSheet({ isOpen, onClose, drafts, onResume, onDelete }: {
               ) : drafts.map(d => {
                 const thumb = d.media?.[0]?.url;
                 return (
-                  <button
+                  <div
                     key={d.id}
                     onClick={() => onResume(d.id)}
-                    className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-3 text-left hover:bg-white/[0.07] transition-colors"
+                    className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-3 text-left hover:bg-white/[0.07] transition-colors cursor-pointer"
                   >
                     {thumb ? (
                       <img src={thumb || null} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
@@ -2631,7 +2631,7 @@ function DraftsSheet({ isOpen, onClose, drafts, onResume, onDelete }: {
                     >
                       <Trash2 className="w-3.5 h-3.5 text-white/50 hover:text-red-400" />
                     </button>
-                  </button>
+                  </div>
                 );
               })}
             </div>
