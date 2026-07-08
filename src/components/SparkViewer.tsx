@@ -61,6 +61,31 @@ import { HighlightAvatar } from "./HighlightAvatar";
 import { SparkSeenBy } from "./SparkSeenBy";
 import { getSparkViewers } from "../lib/mock/sparkViewers";
 
+function formatViewedAgo(timestamp: number): string {
+  const diffMs = Date.now() - timestamp;
+  const diffSecs = Math.floor(diffMs / 1000);
+  if (diffSecs < 60) return "just now";
+  const diffMins = Math.floor(diffSecs / 60);
+  if (diffMins < 60) return `${diffMins}m ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays}d ago`;
+}
+
+function parseViewedAgo(ago: string): number {
+  const now = Date.now();
+  if (ago === "just now") return now;
+  const match = ago.match(/^(\d+)([mh]) ago$/);
+  if (match) {
+    const val = parseInt(match[1]);
+    const unit = match[2];
+    if (unit === "m") return now - val * 60000;
+    if (unit === "h") return now - val * 3600000;
+  }
+  return now - 3 * 3600000; // default to 3 hours ago
+}
+
 interface SparkViewerProps {
   groupedSparks: any[];
   initialUserIndex: number;
@@ -648,14 +673,61 @@ export function SparkViewer({
       if (!Array.isArray(savedList)) savedList = [];
       setIsSaved(savedList.includes(spark.id));
       if (onSparkViewed) onSparkViewed(spark.id);
-      // Increment view count in localStorage
+      // Increment view count and record viewedBy in localStorage
       try {
-        const key = 'skrimchat_spark_views';
-        const views: Record<string, number> = JSON.parse(localStorage.getItem(key) || '{}');
-        views[spark.id] = (views[spark.id] || spark.views || 0) + 1;
-        localStorage.setItem(key, JSON.stringify(views));
-        // mutate so the displayed number updates this session
-        spark.views = views[spark.id];
+        const viewedByKey = "skrimchat_spark_viewedby";
+        const allViewedBy = JSON.parse(localStorage.getItem(viewedByKey) || "{}");
+        let currentViewers = allViewedBy[spark.id];
+
+        if (!currentViewers) {
+          // Initialize with deterministic mock viewers if it doesn't exist yet
+          const originalViews = spark.views || 0;
+          const mockEntries = getSparkViewers(spark.id, originalViews);
+          currentViewers = mockEntries.map((m) => ({
+            id: m.id,
+            username: m.username,
+            displayName: m.displayName,
+            avatar: m.avatar,
+            timestamp: parseViewedAgo(m.viewedAgo),
+          }));
+        }
+
+        if (currentUser) {
+          const sessionKey = `skrimchat_session_viewed_${currentUser.id}`;
+          let sessionViewed = [];
+          try {
+            sessionViewed = JSON.parse(sessionStorage.getItem(sessionKey) || "[]");
+          } catch (e) {}
+
+          if (!sessionViewed.includes(spark.id)) {
+            sessionViewed.push(spark.id);
+            sessionStorage.setItem(sessionKey, JSON.stringify(sessionViewed));
+
+            // Append new view to the real array
+            const newViewer = {
+              id: currentUser.id,
+              username: currentUser.username || "me",
+              displayName: currentUser.displayName || currentUser.fullName || "You",
+              avatar: currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=user",
+              timestamp: Date.now(),
+            };
+            currentViewers.push(newViewer);
+          }
+        }
+
+        allViewedBy[spark.id] = currentViewers;
+        localStorage.setItem(viewedByKey, JSON.stringify(allViewedBy));
+
+        spark.viewedBy = currentViewers;
+        spark.views = currentViewers.length;
+
+        // Sync with legacy views storage if other parts of the app read it
+        try {
+          const viewsKey = "skrimchat_spark_views";
+          const views = JSON.parse(localStorage.getItem(viewsKey) || "{}");
+          views[spark.id] = currentViewers.length;
+          localStorage.setItem(viewsKey, JSON.stringify(views));
+        } catch (e) {}
       } catch (e) {}
     }
   }, [userIndex, sparkIndex, spark?.id, onSparkViewed]);
@@ -2355,17 +2427,20 @@ export function SparkViewer({
                                   </span>
                                 </div>
                                 {(() => {
-                                  const previewViewers = getSparkViewers(spark.id, spark.views || 0).slice(0, 3);
-                                  if (previewViewers.length === 0) return null;
+                                  const realViewers = (spark.viewedBy || [])
+                                    .slice()
+                                    .reverse()
+                                    .slice(0, 3);
+                                  if (realViewers.length === 0) return null;
                                   return (
                                     <div className="flex -space-x-2">
-                                      {previewViewers.map((v, i) => (
+                                      {realViewers.map((v: any, i: number) => (
                                         <img
                                           key={`${spark.id}_viewer_${v.id}_${i}`}
                                           src={v.avatar || null}
                                           alt=""
                                           className="w-6 h-6 rounded-full object-cover border-2 border-black/60"
-                                          style={{ zIndex: previewViewers.length - i }}
+                                          style={{ zIndex: realViewers.length - i }}
                                         />
                                       ))}
                                     </div>
@@ -3325,6 +3400,29 @@ export function SparkViewer({
                         </p>
                         <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">Replies</p>
                       </div>
+                    </div>
+
+                    {/* Seen-by list */}
+                    <div className="mb-6">
+                      <SparkSeenBy
+                        viewers={(spark.viewedBy || [])
+                          .map((v: any) => ({
+                            id: v.id,
+                            username: v.username,
+                            displayName: v.displayName,
+                            avatar: v.avatar,
+                            isVerified: v.isVerified,
+                            viewedAgo: formatViewedAgo(v.timestamp),
+                          }))
+                          .slice()
+                          .reverse()}
+                        totalViews={(spark.viewedBy || []).length}
+                        onViewProfile={(username: string) => {
+                          setActiveSheet(null);
+                          onClose();
+                          navigate(`/profile/${username.replace("@", "")}`);
+                        }}
+                      />
                     </div>
 
                     {/* Reactions section */}
