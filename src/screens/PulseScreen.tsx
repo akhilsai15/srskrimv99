@@ -10,6 +10,7 @@ import {
   Pause, Volume2, VolumeX,
 } from 'lucide-react';
 import { likePost } from '../lib/mock/mockServices';
+import { useNotificationStore } from '../store/notificationStore';
 import { getMutedUsers, getBlockedUsers, getPostModerationSettings, savePostModerationSettings } from '../lib/mock/mockSocialGraph';
 import { getPollState, castVote, type PollState } from '../lib/firebase/polls';
 import { useCurrentUser } from '../hooks/useCurrentUser';
@@ -3354,7 +3355,18 @@ export default function PulseScreen() {
         localStorage.setItem('skrimchat_liked_posts', JSON.stringify(updated));
         localStorage.setItem('skrimchat_like_counts', JSON.stringify(counts));
       } catch (e) {}
-      if (nowLiked) { incrementStat('reactionsSent', 1); incrementStat('pulseScore', 2); }
+      if (nowLiked) { 
+        incrementStat('reactionsSent', 1); 
+        incrementStat('pulseScore', 2); 
+        useNotificationStore.getState().addNotification({
+          type: 'pulse',
+          user: p.user,
+          avatar: p.avatar || 'https://i.pravatar.cc/150?u=system',
+          text: 'pulsed your post ⚡',
+          time: 'Just now',
+          postId: postId,
+        });
+      }
       return { ...p, isLiked: nowLiked, likes: newCount };
     });
     likePost(postId);
@@ -3397,6 +3409,16 @@ export default function PulseScreen() {
         const reaction = SKRIM_REACTIONS.find(r => r.id === reactionId);
         const el = document.getElementById(`pulse-image-${postId}`);
         if (el && reaction) triggerReactionAnimation(el, reaction.id, reaction.emoji);
+        if (reaction) {
+          useNotificationStore.getState().addNotification({
+            type: 'pulse',
+            user: p.user,
+            avatar: p.avatar || 'https://i.pravatar.cc/150?u=system',
+            text: `reacted ${reaction.emoji} to your post`,
+            time: 'Just now',
+            postId: postId,
+          });
+        }
       }
 
       return { ...p, reactions: nextCounts, myReactionId: reactionId };
@@ -3708,7 +3730,24 @@ export default function PulseScreen() {
       <PulseCommentsSheet isOpen={!!activeCommentsPostId} onClose={() => setActiveCommentsPostId(null)}
         currentUser={currentUser} postId={activeCommentsPostId || ''}
         postCommentCount={findPostById(posts, activeCommentsPostId)?.comments || 0}
-        onCommentAdded={() => updatePostCount(activeCommentsPostId || '', 'comments', 1)} />
+        onCommentAdded={(newComment: any) => {
+          updatePostCount(activeCommentsPostId || '', 'comments', 1);
+          if (activeCommentsPostId) {
+            const post = findPostById(posts, activeCommentsPostId);
+            if (post) {
+              useNotificationStore.getState().addNotification({
+                type: 'comment',
+                user: post.user,
+                avatar: post.avatar || 'https://i.pravatar.cc/150?u=system',
+                text: newComment.replyToHandle 
+                  ? `replied to @${newComment.replyToHandle}: "${newComment.text}"` 
+                  : `commented on your post: "${newComment.text}"`,
+                time: 'Just now',
+                postId: activeCommentsPostId,
+              });
+            }
+          }
+        }} />
       <PulseReshareSheet
         isOpen={!!activeResharePostId}
         onClose={() => setActiveResharePostId(null)}

@@ -7,6 +7,7 @@ import {
 import { AvatarWithRing } from './ui';
 import { getPostComments, addPostComment, PulseComment } from '../lib/mock/pulseComments';
 import { mockUsers } from '../lib/mock/mockData';
+import { useNotificationStore } from '../store/notificationStore';
 import { containsFilteredKeyword, getPostModerationSettings } from '../lib/mock/mockSocialGraph';
 import { generateVideoThumbnail } from '../lib/services/thumbnailService';
 import { saveRecord, getAllRecords } from '../lib/services/mediaStorage';
@@ -17,7 +18,7 @@ export function PulseCommentsSheet({
   isOpen, onClose, currentUser, postId, postCommentCount, onCommentAdded
 }: {
   isOpen: boolean; onClose: () => void; currentUser: any;
-  postId: string; postCommentCount: number; onCommentAdded: () => void;
+  postId: string; postCommentCount: number; onCommentAdded: (comment: any) => void;
 }) {
   const [commentInput, setCommentInput] = useState('');
   const [comments, setComments] = useState<PulseComment[]>([]);
@@ -57,7 +58,7 @@ export function PulseCommentsSheet({
     addPostComment(postId, newComment);
     setCommentInput('');
     setReplyingTo(null);
-    onCommentAdded();
+    onCommentAdded(newComment);
   };
 
   const handlePulseComment = (id: string) =>
@@ -255,6 +256,16 @@ export function PulseReshareSheet({
       stored.unshift(repost);
       localStorage.setItem('skrimchat_reposts', JSON.stringify(stored));
     } catch (e) {}
+    if (post) {
+      useNotificationStore.getState().addNotification({
+        type: 'pulse',
+        user: post.user,
+        avatar: post.avatar || 'https://i.pravatar.cc/150?u=system',
+        text: quote.trim() ? `quoted your post: "${quote.trim()}"` : 'reposted your post ⚡',
+        time: 'Just now',
+        postId: post.id,
+      });
+    }
     window.dispatchEvent(new CustomEvent('skrimchat_post_reposted', { detail: repost }));
     return repost;
   };

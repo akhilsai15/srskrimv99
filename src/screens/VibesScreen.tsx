@@ -15,6 +15,7 @@ import { MusicPicker, CURATED_TRACKS } from '../components/MusicPicker';
 import { useSavedStore } from '../store/savedStore';
 import { ReactionRow } from '../components/ReactionRow';
 import { useNavigate } from 'react-router-dom';
+import { useNotificationStore } from '../store/notificationStore';
 import { useFollowStatus, followUser, unfollowUser } from '../lib/mock/mockSocialGraph';
 import { SKRIM_REACTIONS } from '../lib/mock/mockData';
 import { triggerReactionAnimation } from '../lib/animations/reactionAnimations';
@@ -354,6 +355,16 @@ function VibeCard({
         repostsList.unshift(repost);
         localStorage.setItem('skrimchat_reposts', JSON.stringify(repostsList));
 
+        // Add real notification for Vibe reshare
+        useNotificationStore.getState().addNotification({
+          type: 'new_vibe',
+          user: displayUser,
+          avatar: displayAvatar,
+          text: 'reshared your vibe ⚡',
+          time: 'Just now',
+          vibeId: vibe.id,
+        });
+
       } catch (err) {
         console.error("LocalStorage error on reshare:", err);
       }
@@ -422,6 +433,17 @@ function VibeCard({
       const cc: Record<string,number> = JSON.parse(localStorage.getItem('skrimchat_vibe_comments') || '{}');
       cc[vibe.id] = (cc[vibe.id] || vibe.comments) + 1;
       localStorage.setItem('skrimchat_vibe_comments', JSON.stringify(cc));
+
+      // Trigger notification for vibe comment
+      useNotificationStore.getState().addNotification({
+        type: 'vibe_comment',
+        user: displayUser,
+        avatar: displayAvatar,
+        text: `commented on your vibe: "${newComment}"`,
+        time: 'Just now',
+        vibeId: vibe.id,
+        commentId: added.id,
+      });
     } catch (e) {}
   };
 
@@ -475,6 +497,18 @@ function VibeCard({
         const el = document.getElementById(`vibe-container-${vibe.id}`);
         if (el && reaction) {
           triggerReactionAnimation(el, reaction.id, reaction.emoji);
+        }
+
+        // Trigger reaction notification
+        if (reaction) {
+          useNotificationStore.getState().addNotification({
+            type: 'vibe_like',
+            user: displayUser,
+            avatar: displayAvatar,
+            text: `reacted ${reaction.emoji} to your vibe`,
+            time: 'Just now',
+            vibeId: vibe.id,
+          });
         }
       } else {
         localStorage.removeItem(`skrimchat_vibe_reaction_${vibe.id}`);
@@ -804,6 +838,16 @@ function VibeCard({
         });
         incrementStat('reactionsSent', 1);
         incrementStat('pulseScore', 3);
+
+        // Trigger vibe like notification
+        useNotificationStore.getState().addNotification({
+          type: 'vibe_like',
+          user: displayUser,
+          avatar: displayAvatar,
+          text: 'liked your vibe',
+          time: 'Just now',
+          vibeId: vibe.id,
+        });
       }
       setBurst({ x: e.clientX, y: e.clientY });
     } else {
@@ -921,6 +965,16 @@ function VibeCard({
         });
         incrementStat('reactionsSent', 1);
         incrementStat('pulseScore', 3);
+
+        // Trigger vibe like notification
+        useNotificationStore.getState().addNotification({
+          type: 'vibe_like',
+          user: displayUser,
+          avatar: displayAvatar,
+          text: 'liked your vibe',
+          time: 'Just now',
+          vibeId: vibe.id,
+        });
       }
       setBurst({ x: e.clientX, y: e.clientY });
     } else {
@@ -1245,6 +1299,17 @@ function VibeCard({
               onClick={() => {
                 setLiked(l => {
                   const next = !l;
+                  if (next) {
+                    // Trigger vibe like notification
+                    useNotificationStore.getState().addNotification({
+                      type: 'vibe_like',
+                      user: displayUser,
+                      avatar: displayAvatar,
+                      text: 'liked your vibe',
+                      time: 'Just now',
+                      vibeId: vibe.id,
+                    });
+                  }
                   setPulses(p => {
                     const newP = next ? p + 1 : p - 1;
                     try {

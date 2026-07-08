@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { mockUsers } from './mockData';
+import { useNotificationStore } from '../../store/notificationStore';
 
 export function getMessageRequests(): any[] {
   const data = localStorage.getItem('skrimchat_msg_requests');
@@ -135,6 +136,24 @@ export function followUser(targetUsername: string, initialFollowers: number = 0)
     
     // Update current user's profile
     updateCurrentUserFollowing(1);
+    
+    // Find actor details from mockUsers or fallback
+    const userObj = mockUsers.find((u: any) => 
+      u.username?.toLowerCase() === targetUsername.toLowerCase() || 
+      u.handle?.toLowerCase() === targetUsername.toLowerCase() || 
+      u.username?.toLowerCase().replace('@', '') === targetUsername.toLowerCase().replace('@', '')
+    );
+    const displayName = userObj?.displayName || targetUsername.replace('@', '');
+    const avatar = userObj?.avatar || `https://i.pravatar.cc/150?u=${targetUsername}`;
+
+    // Add real notification
+    useNotificationStore.getState().addNotification({
+      type: 'follow',
+      user: displayName,
+      avatar: avatar,
+      text: 'started following you',
+      time: 'Just now',
+    });
     
     // Dispatch event to update UI across components
     window.dispatchEvent(new Event('skrimchat_social_graph_updated'));

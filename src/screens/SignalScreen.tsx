@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, MessageCircle, UserPlus, CheckCircle, Zap, Settings as SettingsIcon, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { getNotifications } from '../lib/mock/mockServices';
 import { FEATURE_FLAGS } from '../lib/config/featureFlags';
 import { AvatarWithRing } from '../components/ui';
 import { Link } from 'react-router-dom';
@@ -21,11 +20,15 @@ export default function SignalScreen() {
   const [activeSpark, setActiveSpark] = useState<any>(null);
   const [activeGroup, setActiveGroup] = useState<any>(null);
   const [showNotifSettings, setShowNotifSettings] = useState(false);
+  
   const { 
     globalVibeNotificationsEnabled, 
     toggleGlobalVibeNotifications,
     soundEffectsEnabled,
-    toggleSoundEffects
+    toggleSoundEffects,
+    notifications: storeNotifications,
+    markNotificationAsRead,
+    markAllAsRead
   } = useNotificationStore();
   const currentUser = useCurrentUser();
 
@@ -34,7 +37,9 @@ export default function SignalScreen() {
       setLoading(true);
       let loadedNotifs: any[] = [];
       if (FEATURE_FLAGS.MOCK_MODE) {
-        const baseNotifs = await getNotifications();
+        // Use real notifications from store instead of static ones
+        const baseNotifs = storeNotifications;
+        
         // Inject FOMO notifications
         const fomoNotifs = [
            { id: 'fomo1', user: 'NeonSamurai', avatar: 'https://i.pravatar.cc/150?img=2', type: 'fomo', text: 'just became a BLAZE CREATOR! 🔥', isRead: false, time: '2m' },
@@ -118,15 +123,20 @@ export default function SignalScreen() {
       // navigating away and back instead of resetting on every remount.
       try {
         const readIds = new Set<string>(JSON.parse(localStorage.getItem('skrimchat_signal_read_ids') || '[]'));
-        loadedNotifs = loadedNotifs.map((n: any) => readIds.has(n.id) ? { ...n, isRead: true } : n);
+        loadedNotifs = loadedNotifs.map((n: any) => {
+          const isStoreNotif = storeNotifications.some((sn: any) => sn.id === n.id);
+          if (isStoreNotif) return n;
+          return readIds.has(n.id) ? { ...n, isRead: true } : n;
+        });
       } catch (e) {}
       setNotifications(loadedNotifs);
       setLoading(false);
     };
     fetchNotifs();
-  }, []);
+  }, [storeNotifications]);
 
   const markAsRead = () => {
+    markAllAsRead();
     const allIds = notifications.map(n => n.id);
     const readSet = new Set<string>(JSON.parse(localStorage.getItem('skrimchat_signal_read_ids') || '[]'));
     allIds.forEach(id => readSet.add(id));
@@ -158,7 +168,7 @@ export default function SignalScreen() {
                <CheckCircle className="w-3 h-3" /> Mark Read
             </button>
             <button onClick={() => setShowNotifSettings(true)} className="p-1.5 rounded-full hover:bg-white/10 transition-colors text-white/60 hover:text-white">
-              <SettingsIcon className="w-4 h-4" />
+               <SettingsIcon className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -175,12 +185,12 @@ export default function SignalScreen() {
         {loading ? (
              <div className="flex items-center justify-center p-8"><div className="w-6 h-6 border-2 border-neon-purple/30 border-t-neon-purple rounded-full animate-spin" /></div>
         ) : filtered.length === 0 ? (
-           <div className="flex flex-col items-center justify-center flex-1 text-center p-8 opacity-50">
-             <Bell className="w-8 h-8 mb-2" />
-             <p className="text-sm">No notifications here.</p>
-           </div>
+            <div className="flex flex-col items-center justify-center flex-1 text-center p-8 opacity-50">
+              <Bell className="w-8 h-8 mb-2" />
+              <p className="text-sm">No notifications here.</p>
+            </div>
         ) : filtered.map(notif => (
-           <div key={notif.id} className={`flex items-center gap-4 py-4 border-b border-white/5 ${!notif.isRead ? 'bg-neon-purple/5 -mx-4 px-4' : ''}`}>
+            <div key={notif.id} className={`flex items-center gap-4 py-4 border-b border-white/5 ${!notif.isRead ? 'bg-neon-purple/5 -mx-4 px-4' : ''}`}>
               <div 
                  className="relative cursor-pointer hover:opacity-80 transition"
                  onClick={() => navigate(`/profile/${notif.user.replace(/\s+/g, '_').toLowerCase()}`)}
@@ -204,10 +214,15 @@ export default function SignalScreen() {
               <div className="flex-1" onClick={() => {
                  // Mark this single notification read on tap, and persist it.
                  if (!notif.isRead) {
-                   const readSet = new Set<string>(JSON.parse(localStorage.getItem('skrimchat_signal_read_ids') || '[]'));
-                   readSet.add(notif.id);
-                   localStorage.setItem('skrimchat_signal_read_ids', JSON.stringify([...readSet]));
-                   setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, isRead: true } : n));
+                   const isStoreNotif = storeNotifications.some((sn: any) => sn.id === notif.id);
+                   if (isStoreNotif) {
+                     markNotificationAsRead(notif.id);
+                   } else {
+                     const readSet = new Set<string>(JSON.parse(localStorage.getItem('skrimchat_signal_read_ids') || '[]'));
+                     readSet.add(notif.id);
+                     localStorage.setItem('skrimchat_signal_read_ids', JSON.stringify([...readSet]));
+                     setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, isRead: true } : n));
+                   }
                  }
                  if (notif.type === 'grind_reminder') {
                    navigate('/vibes');

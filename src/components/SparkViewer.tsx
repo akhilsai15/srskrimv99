@@ -39,6 +39,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { SKRIM_REACTIONS, mockUsers } from "../lib/mock/mockData";
+import { useNotificationStore } from "../store/notificationStore";
 import { MOCK_CHATS } from "../lib/mock/mockChatDirectory";
 import { QRCodeSVG } from "qrcode.react";
 import { generateVideoThumbnail } from "../lib/services/thumbnailService";
@@ -956,6 +957,16 @@ export function SparkViewer({
           vibeId: spark.id // fallback for navigation
         });
         localStorage.setItem('skrimchat_inapp_notifs', JSON.stringify(inApp));
+
+        // Add real notification to store
+        useNotificationStore.getState().addNotification({
+          type: 'vibe_like',
+          user: currentUser?.username || 'me',
+          avatar: currentUser?.avatar || '',
+          text: `reacted with ${emoji} to your Spark! ✨`,
+          time: 'Just now',
+          vibeId: spark.id,
+        });
       } catch (e) {}
     }
 
@@ -1223,6 +1234,16 @@ export function SparkViewer({
           vibeId: spark.id // fallback for navigation
         });
         localStorage.setItem('skrimchat_inapp_notifs', JSON.stringify(inApp));
+
+        // Add real notification to store
+        useNotificationStore.getState().addNotification({
+          type: 'comment',
+          user: currentUser?.username || 'me',
+          avatar: currentUser?.avatar || '',
+          text: `replied to your Spark: "${replyText}" 💬`,
+          time: 'Just now',
+          vibeId: spark.id,
+        });
       } catch (e) {}
     }
 
@@ -1344,6 +1365,19 @@ export function SparkViewer({
           };
           stored.unshift(repost);
           localStorage.setItem('skrimchat_sparks', JSON.stringify(stored));
+
+          // Trigger notification
+          if (!isOwnSpark) {
+            useNotificationStore.getState().addNotification({
+              type: 'pulse',
+              user: currentUser?.username || 'me',
+              avatar: currentUser?.avatar || '',
+              text: 'reposted your Spark! ⚡',
+              time: 'Just now',
+              vibeId: spark.id,
+            });
+          }
+
           window.dispatchEvent(new CustomEvent('skrimchat_spark_reposted', { detail: repost }));
           showToast("Done Added to your Spark! It's live on your profile.");
         } else {

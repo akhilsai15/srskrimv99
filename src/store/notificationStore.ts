@@ -1,5 +1,22 @@
 import { create } from 'zustand';
 
+export interface Notification {
+  id: string;
+  type: 'pulse' | 'comment' | 'mention' | 'follow' | 'fomo' | 'collab_invite' | 'new_vibe' | 'vibe_like' | 'vibe_comment' | 'vibe_reply' | 'grind_reminder' | 'lang_match' | 'alert';
+  user: string;
+  avatar: string;
+  text: string;
+  time: string;
+  isRead: boolean;
+  postId?: string;
+  vibeId?: string;
+  commentId?: string;
+  sparkId?: string;
+  spark?: any;
+  languages?: string[];
+  thumbnail?: string;
+}
+
 interface NotificationState {
   globalVibeNotificationsEnabled: boolean;
   toggleGlobalVibeNotifications: () => void;
@@ -27,6 +44,12 @@ interface NotificationState {
   soundEffectsEnabled: boolean;
   toggleSoundEffects: () => void;
   addToast: (points: number, message: string) => void;
+  
+  // Real notifications array and actions
+  notifications: Notification[];
+  addNotification: (notification: Omit<Notification, 'id' | 'isRead'>) => void;
+  markNotificationAsRead: (id: string) => void;
+  markAllAsRead: () => void;
 }
 
 const playChime = () => {
@@ -61,7 +84,57 @@ const playChime = () => {
   }
 };
 
-export const useNotificationStore = create<NotificationState>((set) => ({
+const getInitialNotifications = (): Notification[] => {
+  try {
+    const stored = localStorage.getItem('skrimchat_real_notifications');
+    if (stored) return JSON.parse(stored);
+  } catch (e) {}
+
+  const seed: Notification[] = [
+    {
+      id: "notif_seed_1",
+      type: "pulse",
+      user: "Rahul Mehta",
+      avatar: "https://picsum.photos/100/100?random=1",
+      text: "pulsed your post ⚡",
+      time: "1h ago",
+      isRead: false
+    },
+    {
+      id: "notif_seed_2",
+      type: "comment",
+      user: "Kavya",
+      avatar: "https://picsum.photos/100/100?random=2",
+      text: "commented on your reel: \"Ekdum mast hai bhai 💜\"",
+      time: "2h ago",
+      isRead: false
+    },
+    {
+      id: "notif_seed_3",
+      type: "mention",
+      user: "Arjun",
+      avatar: "https://picsum.photos/100/100?random=3",
+      text: "mentioned you in a story: \"check this out!\"",
+      time: "3h ago",
+      isRead: true
+    },
+    {
+      id: "notif_seed_4",
+      type: "follow",
+      user: "Sneha Rao",
+      avatar: "https://picsum.photos/100/100?random=4",
+      text: "started following you",
+      time: "4h ago",
+      isRead: true
+    }
+  ];
+  try {
+    localStorage.setItem('skrimchat_real_notifications', JSON.stringify(seed));
+  } catch (e) {}
+  return seed;
+};
+
+export const useNotificationStore = create<NotificationState>((set, get) => ({
   globalVibeNotificationsEnabled: true,
   toggleGlobalVibeNotifications: () => set((state) => ({ globalVibeNotificationsEnabled: !state.globalVibeNotificationsEnabled })),
   likesNotificationsEnabled: true,
@@ -98,6 +171,73 @@ export const useNotificationStore = create<NotificationState>((set) => ({
       total: 12500 + points,
     };
     return { pulseToasts: [...state.pulseToasts, newToast] };
+  }),
+
+  notifications: getInitialNotifications(),
+  addNotification: (notification) => set((state) => {
+    const { type } = notification;
+
+    // Respect existing preference toggles
+    if ((type === 'vibe_like' || type === 'pulse') && !state.likesNotificationsEnabled) {
+      return {};
+    }
+    if ((type === 'vibe_comment' || type === 'comment') && !state.commentsNotificationsEnabled) {
+      return {};
+    }
+    if (type === 'vibe_reply' && !state.repliesNotificationsEnabled) {
+      return {};
+    }
+    if (type === 'new_vibe' && !state.globalVibeNotificationsEnabled) {
+      return {};
+    }
+    if (type === 'grind_reminder' && !state.blazeRunRemindersEnabled) {
+      return {};
+    }
+    if (type === 'lang_match' && !state.languageMatchNotificationsEnabled) {
+      return {};
+    }
+
+    const newNotif: Notification = {
+      ...notification,
+      id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      isRead: false,
+    };
+
+    const updated = [newNotif, ...state.notifications];
+    try {
+      localStorage.setItem('skrimchat_real_notifications', JSON.stringify(updated));
+    } catch (e) {}
+    
+    const unread = updated.filter(n => !n.isRead).length;
+    localStorage.setItem('skrimchat_signal_unread', String(unread));
+    window.dispatchEvent(new CustomEvent('skrimchat_signal_badge', { detail: unread }));
+
+    return { notifications: updated };
+  }),
+  markNotificationAsRead: (id) => set((state) => {
+    const updated = state.notifications.map((n) =>
+      n.id === id ? { ...n, isRead: true } : n
+    );
+    try {
+      localStorage.setItem('skrimchat_real_notifications', JSON.stringify(updated));
+    } catch (e) {}
+
+    const unread = updated.filter(n => !n.isRead).length;
+    localStorage.setItem('skrimchat_signal_unread', String(unread));
+    window.dispatchEvent(new CustomEvent('skrimchat_signal_badge', { detail: unread }));
+
+    return { notifications: updated };
+  }),
+  markAllAsRead: () => set((state) => {
+    const updated = state.notifications.map((n) => ({ ...n, isRead: true }));
+    try {
+      localStorage.setItem('skrimchat_real_notifications', JSON.stringify(updated));
+    } catch (e) {}
+
+    localStorage.setItem('skrimchat_signal_unread', '0');
+    window.dispatchEvent(new CustomEvent('skrimchat_signal_badge', { detail: 0 }));
+
+    return { notifications: updated };
   }),
 }));
 
