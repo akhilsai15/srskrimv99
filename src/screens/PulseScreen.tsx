@@ -3674,7 +3674,12 @@ export default function PulseScreen() {
         onClose={() => setActiveResharePostId(null)}
         post={findPostById(posts, activeResharePostId)}
         currentUser={currentUser}
-        onShareComplete={(_: any, msg: string) => { toast(msg); updatePostCount(activeResharePostId || '', 'shares', 1); }}
+        onShareComplete={(_: any, msg: string) => {
+          toast(msg);
+          if (msg === 'repost successfully') {
+            updatePostCount(activeResharePostId || '', 'shares', 1);
+          }
+        }}
       />
       <PulseSendSheet
         isOpen={!!activeSendPostId}
