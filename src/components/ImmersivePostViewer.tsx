@@ -148,6 +148,17 @@ export function ImmersivePostViewer({ initialIndex, type, urls, user, users, onC
       (currentPost.type !== 'image' && currentPost.type !== 'text' && !currentPost.thumbnail && !currentPost.image && !currentPost.bgColor)
     ))
   );
+
+  const isVibePost = !!(
+    type === 'vibe' ||
+    type === 'reel' ||
+    type === 'video' ||
+    currentPost?.id?.startsWith('vibe') ||
+    currentPost?.id?.startsWith('reel') ||
+    currentPost?.type === 'vibe' ||
+    currentPost?.isVibe ||
+    currentUrl?.includes('400/700')
+  );
   
   // Determine author for the current slide
   const authorRaw = currentPost || user;
@@ -538,11 +549,17 @@ export function ImmersivePostViewer({ initialIndex, type, urls, user, users, onC
                             (type === 'saved') ? '#9ca3af50' :
                             (type === 'repost') ? '#4ade8050' : 'rgba(255,255,255,0.1)'
              }}>
-          {(!type || type === 'post' || type === 'image') && !currentUrl.includes('400/700') && <><span className="text-sm drop-shadow-md">⚡</span> <span className="text-xs font-bold text-[#B026FF]">Pulse Post</span></>}
-          {(type === 'reel' || type === 'video' || type === 'vibe' || currentUrl.includes('400/700')) && <><span className="text-sm drop-shadow-md">🎬</span> <span className="text-xs font-bold text-[#00F0FF]">Vibe</span></>}
+          {(!type || type === 'post' || type === 'image') && !currentUrl.includes('400/700') && !isVibePost && <><span className="text-sm drop-shadow-md">⚡</span> <span className="text-xs font-bold text-[#B026FF]">Pulse Post</span></>}
+          {(type === 'reel' || type === 'video' || type === 'vibe' || (type === 'saved' && isVibePost) || currentUrl.includes('400/700')) && type !== 'repost' && <><span className="text-sm drop-shadow-md">🎬</span> <span className="text-xs font-bold text-[#00F0FF]">Vibe</span></>}
           {type === 'story' && <><span className="text-sm drop-shadow-md">✨</span> <span className="text-xs font-bold text-[#FF2D87]">Spark</span></>}
-          {type === 'saved' && !currentUrl.includes('400/700') && <><span className="text-sm drop-shadow-md grayscale opacity-80">🔖</span> <span className="text-xs font-bold text-gray-400">Saved</span></>}
-          {type === 'repost' && <><span className="text-sm drop-shadow-md">🔄</span> <span className="text-xs font-bold text-green-400">Repost</span></>}
+          {type === 'saved' && !currentUrl.includes('400/700') && !isVibePost && <><span className="text-sm drop-shadow-md grayscale opacity-80">🔖</span> <span className="text-xs font-bold text-gray-400">Saved</span></>}
+          {type === 'repost' && (
+            isVibePost ? (
+              <><span className="text-xs drop-shadow-md">🎬🔄</span> <span className="text-xs font-bold text-green-400">Vibe Repost</span></>
+            ) : (
+              <><span className="text-xs drop-shadow-md">⚡🔄</span> <span className="text-xs font-bold text-green-400">Pulse Repost</span></>
+            )
+          )}
           {type === 'tagged' && <><span className="text-sm drop-shadow-md">👤</span> <span className="text-xs font-bold text-white">Tagged</span></>}
         </div>
 
@@ -614,7 +631,7 @@ export function ImmersivePostViewer({ initialIndex, type, urls, user, users, onC
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
-            className={`relative w-[90%] max-w-[450px] shadow-[0_20px_60px_rgba(176,38,255,0.4)] cursor-pointer touch-none ${(type === 'vibe' || isVideoItem || currentUrl?.includes('400/700')) ? 'aspect-[9/16]' : 'aspect-square'} rounded-[24px] overflow-hidden`}
+            className={`relative w-[90%] max-w-[450px] shadow-[0_20px_60px_rgba(176,38,255,0.4)] cursor-pointer touch-none ${(type === 'vibe' || isVibePost || isVideoItem || currentUrl?.includes('400/700')) ? 'aspect-[9/16]' : 'aspect-square'} rounded-[24px] overflow-hidden`}
             onDoubleClick={handleDoubleTap}
           >
             {(isVideoItem && !isTextOnly) ? (

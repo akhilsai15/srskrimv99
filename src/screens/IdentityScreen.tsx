@@ -1484,7 +1484,7 @@ export default function IdentityScreen() {
                 className="aspect-square bg-white/5 relative group cursor-pointer overflow-hidden"
                 onClick={() => setSelectedMedia({
                   index: i,
-                  type: isVideo ? 'vibe' : 'repost',
+                  type: 'repost',
                   urls: repostItems.map(it => { const p = it.originalPost || it; return p.image || p.images?.[0] || p.videoImageHover || p.videoImage || p.thumbnail || p.videoSrc || `https://picsum.photos/400/400?random=rp${i}`; }),
                   users: repostItems.map(it => { const p = it.originalPost || it; const u = p.user || {}; return { ...p, username: (typeof u === 'object' ? u.username : u) || p.handle || '@someone', avatar: (typeof u === 'object' ? u.avatar : '') || p.avatar || '' }; })
                 })}

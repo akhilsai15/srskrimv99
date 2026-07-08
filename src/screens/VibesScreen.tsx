@@ -314,6 +314,7 @@ function VibeCard({
             text: vibe.caption || '',
             type: vibe.videoSrc ? 'video' : 'image',
             isReshare: true,
+            isVibe: true,
             resharedFrom: vibe.handle || vibe.user || 'user',
           },
           time: 'now',
