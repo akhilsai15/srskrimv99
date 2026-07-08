@@ -220,6 +220,19 @@ export function PulseReshareSheet({
     setTimeout(() => { setView('main'); setQuoteText(''); }, 500);
   };
 
+  const checkAlreadyReposted = () => {
+    if (!post) return false;
+    try {
+      const stored: any[] = JSON.parse(localStorage.getItem('skrimchat_reposts') || '[]');
+      const userHandle = `@${currentUser?.handle || 'you'}`;
+      return stored.some(
+        (r) => r.originalPost?.id === post.id && r.repostedBy?.handle === userHandle
+      );
+    } catch (e) {
+      return false;
+    }
+  };
+
   const buildRepost = (quote: string) => {
     const repost = {
       id: `repost_${post.id}_${Date.now()}`,
@@ -336,7 +349,14 @@ export function PulseReshareSheet({
                 <>
                   {/* Instant Repost */}
                   <button
-                    onClick={() => { buildRepost(''); close('🔄 Reposted to your feed!'); }}
+                    onClick={() => {
+                      if (checkAlreadyReposted()) {
+                        close('it is already reposted');
+                      } else {
+                        buildRepost('');
+                        close('repost successfully');
+                      }
+                    }}
                     className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors text-left group"
                   >
                     <div className="w-12 h-12 rounded-full bg-[#B026FF]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -355,7 +375,13 @@ export function PulseReshareSheet({
 
                   {/* Quote & Repost */}
                   <button
-                    onClick={() => setView('quote')}
+                    onClick={() => {
+                      if (checkAlreadyReposted()) {
+                        close('it is already reposted');
+                      } else {
+                        setView('quote');
+                      }
+                    }}
                     className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors text-left group"
                   >
                     <div className="w-12 h-12 rounded-full bg-[#00F0FF]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -404,7 +430,14 @@ export function PulseReshareSheet({
                     </div>
                   </div>
                   <button
-                    onClick={() => { buildRepost(quoteText); close('🔄 Quoted to your feed!'); }}
+                    onClick={() => {
+                      if (checkAlreadyReposted()) {
+                        close('it is already reposted');
+                      } else {
+                        buildRepost(quoteText);
+                        close('repost successfully');
+                      }
+                    }}
                     className="w-full py-3.5 rounded-2xl font-bold text-sm bg-gradient-to-r from-[#B026FF] to-[#00F0FF] text-white flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_4px_20px_rgba(176,38,255,0.3)]"
                   >
                     <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
