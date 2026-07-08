@@ -2709,11 +2709,11 @@ function FullscreenMediaModal({ media, onClose }: { media: { url: string, type: 
 
         <div className="relative w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
           {media.type === 'video' ? (
-            <video src={currentUrl} controls autoPlay className="max-w-full max-h-full" playsInline />
+            <video src={currentUrl || null} controls autoPlay className="max-w-full max-h-full" playsInline />
           ) : (
             <TransformWrapper>
               <TransformComponent wrapperClass="!w-screen !h-screen flex items-center justify-center">
-                <img src={currentUrl} alt="" className="max-w-full max-h-[85vh] object-contain select-none cursor-zoom-in" />
+                <img src={currentUrl || null} alt="" className="max-w-full max-h-[85vh] object-contain select-none cursor-zoom-in" />
               </TransformComponent>
             </TransformWrapper>
           )}

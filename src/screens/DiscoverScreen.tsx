@@ -512,9 +512,9 @@ function SearchResultsSection({ query, onClose, onSearch }: { query: string, onC
                       >
                         <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-[#151520] relative">
                           {vibe.videoImageHover ? (
-                            <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover pointer-events-none" autoPlay muted loop playsInline />
+                            <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover pointer-events-none" autoPlay muted loop playsInline />
                           ) : (
-                             <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover" />
+                             <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover" />
                           )}
                         </div>
                         <div className="flex flex-col flex-1 py-0.5 justify-center">
@@ -669,9 +669,9 @@ function TrendingSection({ loading, onSeeAll }: { loading: boolean, onSeeAll: ()
               className="w-[140px] h-[200px] shrink-0 rounded-2xl bg-white/5 relative overflow-hidden group cursor-pointer snap-center"
             >
               {vibe.videoImageHover ? (
-                <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
+                <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
               ) : (
-                <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+                <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
               )}
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
@@ -787,9 +787,9 @@ function RisingCard({ vibe }: { vibe: any, key?: any }) {
       className="w-[140px] h-[200px] shrink-0 rounded-2xl bg-white/5 relative overflow-hidden group cursor-pointer snap-center border border-transparent hover:border-[#FF6B35]/50 transition-colors"
     >
       {vibe.videoImageHover ? (
-        <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
+        <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
       ) : (
-        <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+        <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
       )}
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
@@ -932,9 +932,9 @@ function TrendingAllScreen({ onClose }: { onClose: () => void }) {
                className="aspect-[3/4] w-full rounded-2xl bg-white/5 relative overflow-hidden group cursor-pointer"
              >
                 {vibe.videoImageHover ? (
-                  <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
+                  <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
                 ) : (
-                  <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+                  <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
                 )}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
@@ -1134,9 +1134,9 @@ function RoomScreen({ room, onClose }: { room: any, onClose: () => void }) {
                       className="aspect-[3/4] w-full rounded-2xl bg-white/5 relative overflow-hidden group cursor-pointer"
                     >
                        {vibe.videoImageHover ? (
-                         <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
+                         <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
                        ) : (
-                         <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+                         <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
                        )}
                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                        <div className="absolute top-2 left-2 z-10"><div className="bg-black/50 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20">#{idx + 1}</div></div>
@@ -1176,9 +1176,9 @@ function RoomScreen({ room, onClose }: { room: any, onClose: () => void }) {
                       className="w-[140px] h-[200px] shrink-0 rounded-2xl bg-white/5 relative overflow-hidden group cursor-pointer snap-center"
                     >
                        {vibe.videoImageHover ? (
-                         <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
+                         <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
                        ) : (
-                         <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+                         <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
                        )}
                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                        <div className="absolute top-2 left-2 z-10"><div className="bg-purple-500/80 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">NEW</div></div>
@@ -1351,7 +1351,7 @@ function LeaderboardSection({ loading }: { loading: boolean, key?: any }) {
                 >
                    <div className="flex items-center gap-3 overflow-hidden">
                      <span className="text-white/40 text-sm font-bold w-5 text-center shrink-0">#{i + 4}</span>
-                     <img src={c.avatar} className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0" />
+                     <img src={c.avatar || null} className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0" />
                      <span className={`text-sm font-bold truncate ${c.isUser ? 'text-[#00F0FF]' : 'text-white'}`}>{c.displayName}</span>
                    </div>
                    <div className="flex items-center gap-2 shrink-0">
@@ -1421,9 +1421,9 @@ function SurprisePlayerOverlay({ vibe, onClose }: { vibe: any, onClose: () => vo
   return (
     <div className="fixed inset-0 z-[200] bg-black">
       {vibe.videoImageHover ? (
-        <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+        <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover" autoPlay muted loop playsInline />
       ) : (
-        <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover" />
+        <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover" />
       )}
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
@@ -1451,7 +1451,7 @@ function SurprisePlayerOverlay({ vibe, onClose }: { vibe: any, onClose: () => vo
       {/* Bottom Info */}
       <div className="absolute bottom-6 left-4 right-16 z-10">
         <div className="flex items-center gap-2 mb-2">
-           <img src={vibe.avatar} className="w-10 h-10 rounded-full border-2 border-white/20" />
+           <img src={vibe.avatar || null} className="w-10 h-10 rounded-full border-2 border-white/20" />
            <span className="text-white font-bold">{vibe.handle}</span>
         </div>
         <CaptionWithHashtags caption={vibe.caption} className="text-white text-sm drop-shadow-md" />
@@ -1554,15 +1554,15 @@ function YourPeopleSection({ loading, allVibes }: { loading: boolean, allVibes: 
             >
               <div className="flex-1 w-full relative h-[65%]">
                  {vibe.videoImageHover ? (
-                   <video src={vibe.videoImageHover} poster={vibe.avatar} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
+                   <video src={vibe.videoImageHover || null} poster={vibe.avatar || undefined} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 pointer-events-none" autoPlay muted loop playsInline />
                  ) : (
-                   <img src={vibe.avatar} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
+                   <img src={vibe.avatar || null} alt="Vibe" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300" />
                  )}
                  <div className="absolute inset-0 bg-gradient-to-t from-[#151520] via-transparent to-transparent opacity-80" />
               </div>
               <div className="absolute top-2 right-2 flex -space-x-2 z-10 flex-row-reverse space-x-reverse">
                  {vibe._engagedFollowers.slice(0, 3).map((f: any, i: number) => (
-                    <img key={f.id} src={f.avatar} className="w-6 h-6 rounded-full border border-white/20 object-cover shadow-sm bg-[#151520]" style={{ zIndex: 10 - i }} />
+                    <img key={f.id} src={f.avatar || null} className="w-6 h-6 rounded-full border border-white/20 object-cover shadow-sm bg-[#151520]" style={{ zIndex: 10 - i }} />
                  ))}
                  {vibe._engagedFollowers.length > 3 && (
                     <div className="w-6 h-6 rounded-full border border-white/20 bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold flex items-center justify-center relative shadow-sm" style={{ zIndex: 1 }}>

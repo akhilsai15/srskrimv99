@@ -1293,7 +1293,7 @@ export default function IdentityScreen() {
                         />
                       ) : (
                         <img 
-                          src={url || post.image || post.thumbnail} 
+                          src={url || post.image || post.thumbnail || null} 
                           alt="post" 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                         />
@@ -1303,7 +1303,7 @@ export default function IdentityScreen() {
                       </div>
                     </div>
                   ) : (
-                    <img src={url} alt="post" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={url || null} alt="post" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   )}
                   {isPinned && (
                     <div className="absolute top-1.5 left-1.5 w-5 h-5 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center pointer-events-none">
@@ -1439,10 +1439,10 @@ export default function IdentityScreen() {
                   })}
                 >
                   {url ? (
-                    <img src={url} alt="saved" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={url || null} alt="saved" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : item.videoSrc ? (
                     <video 
-                      src={item.videoSrc} 
+                      src={item.videoSrc || null} 
                       muted 
                       playsInline 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
@@ -1503,7 +1503,7 @@ export default function IdentityScreen() {
                   </div>
                 ) : (post.videoSrc && !post.thumbnail && !post.image) ? (
                   <video 
-                    src={post.videoSrc} 
+                    src={post.videoSrc || null} 
                     muted 
                     playsInline 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 

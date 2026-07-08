@@ -156,7 +156,7 @@ function VibeCard({
   const handleVal: any = vibe?.handle;
 
   const displayAvatar = (avatarVal && typeof avatarVal === 'object') 
-    ? (avatarVal.avatar || '') 
+    ? (avatarVal.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80') 
     : (avatarVal || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80');
 
   const displayUser = (userVal && typeof userVal === 'object')
@@ -1097,7 +1097,7 @@ function VibeCard({
           <div className="flex items-center justify-between border-b border-white/5 pb-3">
             <div className="flex items-center gap-3">
               <img 
-                src={displayAvatar} 
+                src={displayAvatar || null} 
                 alt={displayUser} 
                 onClick={handleProfileClick}
                 className="w-10 h-10 rounded-full border border-[#B026FF]/60 object-cover shadow-inner cursor-pointer hover:border-[#00F0FF] transition-colors" 
