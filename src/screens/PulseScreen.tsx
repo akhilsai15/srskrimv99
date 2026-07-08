@@ -5,7 +5,7 @@ import { saveRecord, getAllRecords, deleteRecord } from '../lib/services/mediaSt
 import {
   Heart, MessageCircle, Bookmark, MoreHorizontal, Zap,
   SmilePlus, RefreshCw, X, Play, ChevronLeft, ChevronRight,
-  Music, MapPin, Quote, Flame, Plus, Images, Video, Send,
+  Music, MapPin, Quote, Flame, Plus, Image as ImageIcon, Video, Send,
   Tag, Hash, Search, Check, Clock, Calendar, Trash2, FileEdit, BarChart3,
   Pause, Volume2, VolumeX,
 } from 'lucide-react';
@@ -2318,7 +2318,7 @@ function PulseCreateSheet({ isOpen, onClose, currentUser, onPost, onSchedule, dr
                     onClick={() => fileInputRef.current?.click()}
                     className="flex items-center gap-1.5 px-2.5 py-2 rounded-full text-[#B026FF] hover:bg-[#B026FF]/10 transition-colors text-xs font-semibold shrink-0"
                   >
-                    <Images className="w-5 h-5" /> Photos
+                    <ImageIcon className="w-5 h-5" /> Photos
                   </button>
                   <button
                     onClick={() => fileInputRef.current?.click()}

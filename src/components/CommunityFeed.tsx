@@ -1881,7 +1881,7 @@ function Composer({
                       onClick={() => imageInputRef.current?.click()}
                       className="w-full flex items-center justify-center gap-2 border border-dashed border-white/10 hover:border-white/20 hover:bg-white/5 rounded-xl py-3 px-4 text-xs font-bold text-white/80 cursor-pointer transition-all text-center"
                     >
-                      <span>📁</span> Upload Image File
+                      <ImageIcon className="w-4 h-4 text-[#00F0FF]" /> Upload Image File
                     </button>
                   </div>
 
@@ -1971,7 +1971,7 @@ function Composer({
                       onClick={() => videoInputRef.current?.click()}
                       className="w-full flex items-center justify-center gap-2 border border-dashed border-white/10 hover:border-white/20 hover:bg-white/5 rounded-xl py-3 px-4 text-xs font-bold text-white/80 cursor-pointer transition-all text-center"
                     >
-                      <span>📁</span> Upload Video File
+                      <VideoIcon className="w-4 h-4 text-[#FF2D87]" /> Upload Video File
                     </button>
                   </div>
 

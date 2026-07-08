@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from 'motion/re
 import {
   Zap, MessageCircle, Share2, Bookmark, Volume2, VolumeX,
   Music, Heart, Play, Pause, ChevronUp, ChevronDown, Search, X,
-  MoreHorizontal, Plus, Images, Video, RefreshCw, Send, ChevronLeft, ChevronRight,
+  MoreHorizontal, Plus, Image as ImageIcon, Video, RefreshCw, Send, ChevronLeft, ChevronRight,
   Hash, Tag, Repeat,
 } from 'lucide-react';
 import { saveRecord, getAllRecords, deleteRecord } from '../lib/services/mediaStorage';
@@ -1685,7 +1685,7 @@ function VibeCreateSheet({ isOpen, onClose, currentUser, onPost }: {
                     }`}
                   >
                     {type === 'text' && <span className="text-sm font-sans leading-none">Aa</span>}
-                    {type === 'image' && <Images className="w-3.5 h-3.5" />}
+                    {type === 'image' && <ImageIcon className="w-3.5 h-3.5" />}
                     {type === 'video' && <Video className="w-3.5 h-3.5" />}
                     {type}
                   </button>
@@ -1890,7 +1890,7 @@ function VibeCreateSheet({ isOpen, onClose, currentUser, onPost }: {
                       className="w-full aspect-[16/10] rounded-2xl border-2 border-dashed border-white/10 bg-white/5 hover:bg-white/10 hover:border-[#B026FF]/40 flex flex-col items-center justify-center gap-2 transition-all group py-8"
                     >
                       <div className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center text-white/40 group-hover:scale-110 group-hover:bg-[#B026FF]/10 group-hover:text-[#B026FF] transition-all">
-                        {postType === 'image' ? <Images className="w-5 h-5" /> : <Video className="w-5 h-5" />}
+                        {postType === 'image' ? <ImageIcon className="w-5 h-5" /> : <Video className="w-5 h-5" />}
                       </div>
                       <div className="text-center">
                         <p className="text-white text-xs font-semibold">Click to select high-quality Vibe {postType}</p>
