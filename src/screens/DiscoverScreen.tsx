@@ -7,6 +7,7 @@ import { useFollowStatus, followUser, unfollowUser } from '../lib/mock/mockSocia
 import { SkrimGamesSection } from '../components/SkrimGamesSection';
 import { CaptionWithHashtags } from '../components/CaptionWithHashtags';
 import { useWorlds } from '../hooks/useWorldMembership';
+import { PreSearchBentoGrid } from '../components/PreSearchBentoGrid';
 
 const DISCOVER_FILTERS = [
   { id: "all", label: "All", emoji: "⚡" },
@@ -1601,6 +1602,7 @@ export default function DiscoverScreen() {
   const [isWiping, setIsWiping] = useState(false);
 
   const navigate = useNavigate();
+  const allWorlds = useWorlds();
   const searchAreaRef = useRef<HTMLDivElement>(null);
   
   // Pull to refresh state
@@ -1792,31 +1794,42 @@ export default function DiscoverScreen() {
           <SearchResultsSection query={query} onClose={() => {setQuery(""); setSearchFocused(false);}} onSearch={(term) => setQuery(term)} />
         ) : (
           <div className="pt-6">
-            {(selectedFilter === "all" ? DISCOVER_SECTIONS : DISCOVER_SECTIONS.filter(s => s.id === selectedFilter)).map((section) => 
-              section.id === "games" ? (
-                <SkrimGamesSection key={section.id} />
-              ) : section.id === "trending" ? (
-                <TrendingSection key={section.id} loading={loading} onSeeAll={() => setViewTrendingAll(true)} />
-              ) : section.id === "hashtags" ? (
-                <HashtagsSection key={section.id} loading={loading} />
-              ) : section.id === "rising" ? (
-                <RisingSection key={section.id} loading={loading} />
-              ) : section.id === "language" ? (
-                <LanguageRoomSection key={section.id} loading={loading} onOpenRoom={(room) => setSelectedRoom(room)} />
-              ) : section.id === "leaderboard" ? (
-                <LeaderboardSection key={section.id} loading={loading} />
-              ) : section.id === "surprise" ? (
-                <SurpriseSection key={section.id} onStartSurprise={startSurpriseLoop} />
-              ) : section.id === "your_people" ? (
-                <YourPeopleSection key={section.id} loading={loading} allVibes={allVibes} />
-              ) : (
-                <Section 
-                  key={section.id} 
-                  title={section.title} 
-                  icon={section.icon} 
-                  color={section.color} 
-                  loading={loading}
-                />
+            {selectedFilter === "all" ? (
+              <PreSearchBentoGrid
+                allVibes={allVibes}
+                allWorlds={allWorlds}
+                loading={loading}
+                onOpenRoom={(room) => setSelectedRoom(room)}
+                onStartSurprise={startSurpriseLoop}
+                onSeeAllTrending={() => setViewTrendingAll(true)}
+              />
+            ) : (
+              DISCOVER_SECTIONS.filter(s => s.id === selectedFilter).map((section) => 
+                section.id === "games" ? (
+                  <SkrimGamesSection key={section.id} />
+                ) : section.id === "trending" ? (
+                  <TrendingSection key={section.id} loading={loading} onSeeAll={() => setViewTrendingAll(true)} />
+                ) : section.id === "hashtags" ? (
+                  <HashtagsSection key={section.id} loading={loading} />
+                ) : section.id === "rising" ? (
+                  <RisingSection key={section.id} loading={loading} />
+                ) : section.id === "language" ? (
+                  <LanguageRoomSection key={section.id} loading={loading} onOpenRoom={(room) => setSelectedRoom(room)} />
+                ) : section.id === "leaderboard" ? (
+                  <LeaderboardSection key={section.id} loading={loading} />
+                ) : section.id === "surprise" ? (
+                  <SurpriseSection key={section.id} onStartSurprise={startSurpriseLoop} />
+                ) : section.id === "your_people" ? (
+                  <YourPeopleSection key={section.id} loading={loading} allVibes={allVibes} />
+                ) : (
+                  <Section 
+                    key={section.id} 
+                    title={section.title} 
+                    icon={section.icon} 
+                    color={section.color} 
+                    loading={loading}
+                  />
+                )
               )
             )}
           </div>
