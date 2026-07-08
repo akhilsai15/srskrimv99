@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, ArrowRight, ArrowLeft, Gamepad2, Music, Palette, Monitor, Dumbbell, BookOpen, Pizza, Plane, Briefcase, Coffee, Check } from "lucide-react";
+import { X, ArrowRight, ArrowLeft, Gamepad2, Music, Palette, Monitor, Dumbbell, BookOpen, Pizza, Plane, Briefcase, Coffee, Check, Image as ImageIcon, Camera } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ATMOSPHERES = [
@@ -486,7 +486,7 @@ function Step2Atmosphere({ data, onChange, onNext, activeColors }: any) {
           {data.cover ? (
             <>
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/55 transition-colors flex items-center justify-center gap-2">
-                <span className="text-white text-[12px] font-bold flex items-center gap-1.5">📷 Change cover</span>
+                <span className="text-white text-[12px] font-bold flex items-center gap-1.5"><Camera className="w-3.5 h-3.5" /> Change cover</span>
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); onChange({ cover: "" }); }}
@@ -497,7 +497,7 @@ function Step2Atmosphere({ data, onChange, onNext, activeColors }: any) {
             </>
           ) : (
             <div className="flex flex-col items-center gap-1.5 text-[#888899] group-hover:text-white/70 transition-colors">
-              <span className="text-2xl">🖼️</span>
+              <ImageIcon className="w-6 h-6" />
               <span className="text-[12px] font-bold">Choose from gallery</span>
             </div>
           )}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Plus } from 'lucide-react';
+import { Plus, Image as ImageIcon, Video, Zap, Users, Target } from 'lucide-react';
 import { SparkEnergy } from '../lib/mock/mockData';
 
 interface SparkRowProps {
@@ -186,29 +186,29 @@ export function SparkRow({ sparks, onSparkClick, onAddSpark, currentUser, active
 
                {/* Badges */}
                {isNova && !hasViewed && !isExpiringSoon && (
-                 <div className="absolute -top-1 -right-1 bg-[#121212] rounded-full p-0.5 border border-white/20 z-10">
-                   <span className="text-[10px] leading-none">🚀</span>
+                 <div className="absolute -top-1 -right-1 bg-black/80 backdrop-blur-md rounded-full p-1 border border-white/20 z-10 shadow-lg flex items-center justify-center">
+                   <Zap className="w-2.5 h-2.5 text-yellow-400 fill-yellow-400" />
                  </div>
                )}
                {latestSpark.type === 'image' && (
-                 <div className="absolute -bottom-1 -right-1 bg-white/10 backdrop-blur-md rounded-full px-1.5 py-0.5 border border-white/20 z-10 shadow-sm flex items-center justify-center">
-                   <span className="text-[10px] leading-none">🖼️</span>
+                 <div className="absolute -bottom-1 -right-1 bg-black/80 backdrop-blur-md rounded-full p-1 border border-white/20 z-10 shadow-lg flex items-center justify-center">
+                   <ImageIcon className="w-3 h-3 text-[#00F0FF]" />
                  </div>
                )}
                {latestSpark.type === 'video' && (
-                 <div className="absolute -bottom-1 -right-1 bg-white/10 backdrop-blur-md rounded-full px-1.5 py-0.5 border border-white/20 z-10 shadow-sm flex items-center gap-1">
-                   <span className="text-[10px] leading-none">🎥</span>
+                 <div className="absolute -bottom-1 -right-1 bg-black/80 backdrop-blur-md rounded-full px-1.5 py-0.5 border border-white/20 z-10 shadow-lg flex items-center gap-1 justify-center">
+                   <Video className="w-3 h-3 text-[#FF2D87]" />
                    {latestSpark.duration && <span className="text-[9px] font-bold text-white">0:{latestSpark.duration.toString().padStart(2, '0')}</span>}
                  </div>
                )}
                {latestSpark.isChallenge && !hasViewed && !isExpiringSoon && (
-                 <div className="absolute -top-1 right-3 bg-[#121212] rounded-full p-0.5 border border-white/20 z-10">
-                   <span className="text-[10px] leading-none">🎯</span>
+                 <div className="absolute -top-1 right-3 bg-black/80 backdrop-blur-md rounded-full p-1 border border-white/20 z-10 shadow-lg flex items-center justify-center">
+                   <Target className="w-2.5 h-2.5 text-orange-500" />
                  </div>
                )}
                {latestSpark.isCollab && !hasViewed && !isExpiringSoon && (
-                 <div className="absolute bottom-0 right-0 bg-[#121212] rounded-full p-0.5 border border-white/20 z-10">
-                   <span className="text-[10px] leading-none">👥</span>
+                 <div className="absolute bottom-0 right-0 bg-black/80 backdrop-blur-md rounded-full p-1 border border-white/20 z-10 shadow-lg flex items-center justify-center">
+                   <Users className="w-2.5 h-2.5 text-purple-400" />
                  </div>
                )}
              </div>
