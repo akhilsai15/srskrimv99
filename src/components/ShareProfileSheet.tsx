@@ -44,6 +44,7 @@ export function ShareProfileSheet({ isOpen, onClose, user }: ShareProfileSheetPr
   const [arattaiToast, setArattaiToast] = useState(false);
   const [actionToast, setActionToast] = useState<string | null>(null);
   const [view, setView] = useState<'main' | 'more'>('main');
+  const [isRevealed, setIsRevealed] = useState(false);
   const qrWrapRef = React.useRef<HTMLDivElement>(null);
   const profileUrl = `skrimchat.app/${user.username.startsWith('@') ? user.username : '@'+user.username}`;
 
@@ -289,7 +290,10 @@ export function ShareProfileSheet({ isOpen, onClose, user }: ShareProfileSheetPr
   // Reset view when closing
   const handleClose = () => {
     onClose();
-    setTimeout(() => setView('main'), 300);
+    setTimeout(() => {
+      setView('main');
+      setIsRevealed(false);
+    }, 300);
   };
 
   if (!isOpen) return null;
@@ -364,55 +368,137 @@ export function ShareProfileSheet({ isOpen, onClose, user }: ShareProfileSheetPr
                   </div>
 
                   {/* SEC 1: SKRIMCARD */}
-                  <div className="flex flex-col gap-4">
-                    <motion.div 
-                      layoutId="skrimcard"
-                      className={`w-full rounded-[24px] p-6 bg-gradient-to-br ${activeTheme.gradient} border border-white/20 relative overflow-hidden ${activeTheme.glow}`}
-                    >
-                      {/* Texture overlay */}
-                      <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiLz48cmVjdCB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSIjMDAwIi8+PC9zdmc+')]"></div>
-                      
-                      {/* Visual Shimmer effect */}
-                      <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[100%] animate-[shimmer_3s_infinite]" />
+                  <div className="flex flex-col gap-4 relative">
+                    <AnimatePresence mode="wait">
+                      {!isRevealed ? (
+                        <motion.div
+                          key="slider-gate"
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, y: -20, scale: 1.02 }}
+                          className="w-full h-[360px] rounded-[24px] bg-[#0A0A0A] border border-[#B026FF]/35 p-6 flex flex-col justify-between items-center relative overflow-hidden shadow-[0_0_25px_rgba(176,38,255,0.15)]"
+                        >
+                          {/* Holographic grid lines and particle beams */}
+                          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f192e_1px,transparent_1px),linear-gradient(to_bottom,#1f192e_1px,transparent_1px)] bg-[size:16px_16px] opacity-35 pointer-events-none" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-0 pointer-events-none" />
+                          
+                          {/* Futuristic holographic circle rings */}
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-[#00F0FF]/20 rounded-full animate-ping [animation-duration:3s] pointer-events-none" />
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 border-2 border-dashed border-[#B026FF]/20 rounded-full animate-spin [animation-duration:12s] pointer-events-none" />
 
-                      <div className="relative z-10 flex flex-col items-center text-center">
-                        <AvatarWithRing src={user.avatar} size="xl" className="mb-4 ring-2 ring-white shadow-xl" />
-                        <div className="bg-black/20 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 mb-2 border border-white/10">
-                          <Zap className="w-3.5 h-3.5 text-[#FFD700] fill-[#FFD700]" />
-                          <span className="text-[#FFD700] text-[10px] font-black tracking-wider">CREATOR</span>
-                        </div>
-                        <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-md">{user.displayName}</h2>
-                        <p className="text-white/80 font-medium text-sm mb-4 drop-shadow-sm">{user.username.startsWith('@') ? user.username : '@'+user.username}</p>
-                        
-                        {user.bio && (
-                          <p className="text-white/90 text-sm font-medium italic mb-6 leading-relaxed px-4 text-center line-clamp-3">"{user.bio}"</p>
-                        )}
+                          <div className="relative z-10 text-center flex flex-col items-center mt-6">
+                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B026FF]/20 to-[#00F0FF]/20 border border-[#00F0FF]/40 flex items-center justify-center mb-4 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                              <Zap className="w-8 h-8 text-[#00F0FF] animate-pulse" />
+                            </div>
+                            <h4 className="text-white font-black text-base tracking-wide uppercase">Holographic Share Mode</h4>
+                            <p className="text-gray-400 text-xs mt-1 px-4">Initialize secure high-fidelity profile projection</p>
+                          </div>
 
-                        <div className="flex items-center justify-center gap-6 w-full py-4 border-t border-white/20">
-                          <div className="flex flex-col items-center">
-                            <span className="text-white font-black text-lg drop-shadow-md">{user.score || '4.2K'}</span>
-                            <span className="text-white/70 text-[10px] font-bold">SCORE</span>
+                          {/* Futuristic Slider Track */}
+                          <div className="w-full bg-white/5 border border-white/10 h-14 rounded-2xl relative p-1 flex items-center z-10 overflow-hidden">
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <span className="text-[11px] font-black tracking-widest text-[#00F0FF]/60 uppercase animate-pulse select-none">
+                                SLIDE TO PROJECT ID
+                              </span>
+                            </div>
+                            <motion.div
+                              drag="x"
+                              dragConstraints={{ left: 0, right: 300 }}
+                              dragElastic={0.05}
+                              onDragEnd={(e, info) => {
+                                if (info.offset.x > 180) {
+                                  setIsRevealed(true);
+                                }
+                              }}
+                              whileDrag={{ scale: 1.05 }}
+                              className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#B026FF] to-[#00F0FF] shadow-[0_0_15px_#00F0FF] flex items-center justify-center cursor-grab active:cursor-grabbing z-20"
+                            >
+                              <Share className="w-5 h-5 text-black stroke-[3px]" />
+                            </motion.div>
                           </div>
-                          <div className="flex flex-col items-center">
-                            <span className="text-white font-black text-lg drop-shadow-md">{user.followers}</span>
-                            <span className="text-white/70 text-[10px] font-bold">FOLLOWERS</span>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="profile-hologram"
+                          initial={{ opacity: 0, y: 30, scale: 0.9, filter: "brightness(2) contrast(1.2)" }}
+                          animate={{ opacity: 1, y: 0, scale: 1, filter: "brightness(1) contrast(1)" }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                          className="w-full relative group"
+                        >
+                          {/* Animated Scanline Overlay */}
+                          <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-[24px]">
+                            <motion.div
+                              animate={{ y: ["-100%", "200%"] }}
+                              transition={{ repeat: Infinity, duration: 2.2, ease: "linear" }}
+                              className="w-full h-1/2 bg-gradient-to-b from-transparent via-[#00F0FF]/35 to-transparent shadow-[0_0_30px_#00F0FF]"
+                            />
                           </div>
-                          <div className="flex flex-col items-center">
-                            <span className="text-white font-black text-lg drop-shadow-md">{user.posts || '12'}</span>
-                            <span className="text-white/70 text-[10px] font-bold">POSTS</span>
-                          </div>
-                        </div>
+
+                          {/* Tech Grid Background Overlay */}
+                          <div className="absolute inset-0 pointer-events-none z-20 bg-[linear-gradient(to_right,rgba(0,240,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,240,255,0.05)_1px,transparent_1px)] bg-[size:12px_12px] opacity-40 rounded-[24px]" />
+
+                          <motion.div 
+                            layoutId="skrimcard"
+                            className={`w-full rounded-[24px] p-6 bg-gradient-to-br ${activeTheme.gradient} border border-white/20 relative overflow-hidden ${activeTheme.glow}`}
+                          >
+                            {/* Texture overlay */}
+                            <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiLz48cmVjdCB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSIjMDAwIi8+PC9zdmc+')]"></div>
+                            
+                            {/* Visual Shimmer effect */}
+                            <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[100%] animate-[shimmer_3s_infinite]" />
+
+                            <div className="relative z-10 flex flex-col items-center text-center">
+                              <AvatarWithRing src={user.avatar} size="xl" className="mb-4 ring-2 ring-white shadow-xl" />
+                              <div className="bg-black/20 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 mb-2 border border-white/10">
+                                <Zap className="w-3.5 h-3.5 text-[#FFD700] fill-[#FFD700]" />
+                                <span className="text-[#FFD700] text-[10px] font-black tracking-wider">CREATOR</span>
+                              </div>
+                              <h2 className="text-2xl font-black text-white tracking-tight drop-shadow-md">{user.displayName}</h2>
+                              <p className="text-white/80 font-medium text-sm mb-4 drop-shadow-sm">{user.username.startsWith('@') ? user.username : '@'+user.username}</p>
+                              
+                              {user.bio && (
+                                <p className="text-white/90 text-sm font-medium italic mb-6 leading-relaxed px-4 text-center line-clamp-3">"{user.bio}"</p>
+                              )}
+
+                              <div className="flex items-center justify-center gap-6 w-full py-4 border-t border-white/20">
+                                <div className="flex flex-col items-center">
+                                  <span className="text-white font-black text-lg drop-shadow-md">{user.score || '4.2K'}</span>
+                                  <span className="text-white/70 text-[10px] font-bold">SCORE</span>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                  <span className="text-white font-black text-lg drop-shadow-md">{user.followers}</span>
+                                  <span className="text-white/70 text-[10px] font-bold">FOLLOWERS</span>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                  <span className="text-white font-black text-lg drop-shadow-md">{user.posts || '12'}</span>
+                                  <span className="text-white/70 text-[10px] font-bold">POSTS</span>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                          
+                          {/* Close/Reset Presentation button */}
+                          <button
+                            onClick={() => setIsRevealed(false)}
+                            className="absolute top-3 right-3 z-30 p-1.5 rounded-lg bg-black/60 border border-white/10 text-white/70 hover:text-white hover:bg-black/80 transition-all text-[10px] uppercase font-mono tracking-widest flex items-center gap-1 animate-pulse"
+                          >
+                            <span>Reset Hologram</span>
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {isRevealed && (
+                      <div className="flex gap-3">
+                        <button onClick={handleSaveCard} className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-colors">
+                          <Download className="w-4 h-4" /> Save Card
+                        </button>
+                        <button onClick={handleShareCard} className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-colors">
+                          <Share className="w-4 h-4" /> Share Card
+                        </button>
                       </div>
-                    </motion.div>
-
-                    <div className="flex gap-3">
-                      <button onClick={handleSaveCard} className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-colors">
-                        <Download className="w-4 h-4" /> Save Card
-                      </button>
-                      <button onClick={handleShareCard} className="flex-1 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 transition-colors">
-                        <Share className="w-4 h-4" /> Share Card
-                      </button>
-                    </div>
+                    )}
                   </div>
 
                   {/* SEC 2: QR CODE */}

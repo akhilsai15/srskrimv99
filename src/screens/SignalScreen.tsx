@@ -6,7 +6,7 @@ import { getNotifications } from '../lib/mock/mockServices';
 import { FEATURE_FLAGS } from '../lib/config/featureFlags';
 import { AvatarWithRing } from '../components/ui';
 import { Link } from 'react-router-dom';
-import { useNotificationStore } from '../store/notificationStore';
+import { useNotificationStore, simulatePulseReward } from '../store/notificationStore';
 
 import { ArrowLeft } from 'lucide-react';
 import { SparkViewer } from '../components/SparkViewer';
@@ -21,7 +21,12 @@ export default function SignalScreen() {
   const [activeSpark, setActiveSpark] = useState<any>(null);
   const [activeGroup, setActiveGroup] = useState<any>(null);
   const [showNotifSettings, setShowNotifSettings] = useState(false);
-  const { globalVibeNotificationsEnabled, toggleGlobalVibeNotifications } = useNotificationStore();
+  const { 
+    globalVibeNotificationsEnabled, 
+    toggleGlobalVibeNotifications,
+    soundEffectsEnabled,
+    toggleSoundEffects
+  } = useNotificationStore();
   const currentUser = useCurrentUser();
 
   useEffect(() => {
@@ -318,6 +323,50 @@ export default function SignalScreen() {
                </div>
                
                <div className="p-4 flex flex-col gap-3 overflow-y-auto pb-8">
+                  {/* Sound Effects Toggle & Simulator (Task 5) */}
+                  <div className="flex flex-col gap-0 bg-[#0A0A0A] rounded-2xl border border-[#B026FF]/30 p-5 shadow-[0_0_15px_rgba(176,38,255,0.08)] text-left">
+                    <div className="flex items-start justify-between gap-3 pb-4 border-b border-white/5">
+                      <div className="flex-1 pr-4">
+                        <p className="font-bold text-white text-lg leading-snug flex items-center gap-2">
+                          🔊 Sound Effects
+                        </p>
+                        <p className="text-white/60 text-sm mt-1.5 leading-relaxed">
+                          Play a digital chime for incoming high-priority Signal events.
+                        </p>
+                      </div>
+                      
+                      <button 
+                         onClick={() => toggleSoundEffects()}
+                         className={`relative w-14 h-8 mt-1 rounded-full transition-colors ${soundEffectsEnabled ? 'bg-[#00F0FF]' : 'bg-white/20'}`}
+                      >
+                         <div className={`w-6 h-6 rounded-full bg-white absolute top-1 transition-all ${soundEffectsEnabled ? 'left-7' : 'left-1'}`} />
+                      </button>
+                    </div>
+
+                    <div className="pt-4 flex flex-col gap-2">
+                      <p className="text-[11px] font-black uppercase tracking-wider text-[#00F0FF] mb-1">
+                        ⚡ SIGNAL SIMULATION TOOLS
+                      </p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button 
+                          onClick={() => {
+                            simulatePulseReward("milestone");
+                          }}
+                          className="px-3 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold border border-white/10 transition-colors"
+                        >
+                          🏆 Milestone Alert
+                        </button>
+                        <button 
+                          onClick={() => {
+                            simulatePulseReward("streak");
+                          }}
+                          className="px-3 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold border border-white/10 transition-colors"
+                        >
+                          🔥 Streak Alert
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                  <div className="flex items-start justify-between gap-3 p-5 bg-white/5 rounded-2xl border border-white/5">
                    <div className="flex-1 pr-4">
                      <p className="font-bold text-white text-lg leading-snug">

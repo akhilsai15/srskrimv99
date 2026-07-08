@@ -609,6 +609,43 @@ function PostCard({
   const authorBadge =
     levelLabels[post.authorLevel as keyof typeof levelLabels] ||
     levelLabels.explorer;
+
+  const renderRoleBadge = (username: string, authorLevel?: string) => {
+    // If Admin
+    if (authorLevel === "admin" || username === "SkrimAdmin" || (username === "You" && isAdmin)) {
+      return (
+        <span className="text-[9px] bg-red-500/10 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded font-black tracking-wide flex items-center gap-1 shadow-[0_0_8px_rgba(239,68,68,0.25)]">
+          👑 Admin
+        </span>
+      );
+    }
+    // If Moderator
+    if (authorLevel === "moderator" || username.includes("Mod") || username === "Kavya") {
+      return (
+        <span className="text-[9px] bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]/30 px-1.5 py-0.5 rounded font-black tracking-wide flex items-center gap-1 shadow-[0_0_8px_rgba(0,240,255,0.25)]">
+          🛡️ Mod
+        </span>
+      );
+    }
+    // If Top Contributor
+    if (authorLevel === "legend" || authorLevel === "pioneer" || username === "Rahul Mehta" || username === "Arjun") {
+      return (
+        <span className="text-[9px] bg-[#B026FF]/10 text-[#B026FF] border border-[#B026FF]/30 px-1.5 py-0.5 rounded font-black tracking-wide flex items-center gap-1 shadow-[0_0_8px_rgba(176,38,255,0.25)]">
+          ⚡ Contributor
+        </span>
+      );
+    }
+    // Default
+    const badge = levelLabels[authorLevel as keyof typeof levelLabels] || levelLabels.explorer;
+    return (
+      <span
+        className="text-[9px] px-1.5 py-0.5 rounded-sm font-bold bg-white/5 border border-white/5"
+        style={{ color: badge.color }}
+      >
+        {badge.label}
+      </span>
+    );
+  };
   const isExclusive = post.isExclusive;
 
   return (
@@ -731,12 +768,7 @@ function PostCard({
                   💎
                 </span>
               )}
-              <span
-                className="text-[10px] px-1.5 py-0.5 rounded-sm font-bold bg-white/5 border border-white/5"
-                style={{ color: authorBadge.color }}
-              >
-                {authorBadge.label}
-              </span>
+              {renderRoleBadge(post.author, post.authorLevel)}
               {post.tag && (
                 <span className="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-1.5 py-0.5 rounded-full font-bold flex items-center gap-1">
                   🏷 {post.tag}
@@ -1112,6 +1144,7 @@ function PostCard({
                         <span className="text-[12px] font-bold text-white">
                           {c.author}
                         </span>
+                        {renderRoleBadge(c.author)}
                         <span className="text-[10px] text-[#888899]">{c.time}</span>
                       </div>
                       <p className="text-[13px] text-white/90 leading-tight">

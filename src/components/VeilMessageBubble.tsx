@@ -38,6 +38,102 @@ interface VeilMessageBubbleProps {
 
 const MATRIX_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$*&%';
 
+function PixelDustBurnEffect({ active }: { active: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    if (!active) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = canvas.width = canvas.offsetWidth || 300;
+    const height = canvas.height = canvas.offsetHeight || 120;
+
+    const particles: {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      color: string;
+      alpha: number;
+      decay: number;
+    }[] = [];
+
+    for (let i = 0; i < 160; i++) {
+      const startX = Math.random() * width;
+      const startY = Math.random() * height;
+      
+      const colorRand = Math.random();
+      let color = '#FF3B3B'; // Neon red
+      if (colorRand < 0.3) {
+        color = '#B026FF'; // Neon purple
+      } else if (colorRand < 0.6) {
+        color = '#00F0FF'; // Neon blue
+      } else if (colorRand < 0.8) {
+        color = '#FFA500'; // Bright orange
+      } else {
+        color = '#FFFFFF'; // White heat
+      }
+
+      particles.push({
+        x: startX,
+        y: startY,
+        vx: (Math.random() - 0.5) * 4,
+        vy: -Math.random() * 3.5 - 1.5,
+        size: Math.random() * 3.5 + 1.5,
+        color,
+        alpha: 1.0,
+        decay: Math.random() * 0.012 + 0.006,
+      });
+    }
+
+    let animId: number;
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      let alive = false;
+      particles.forEach((p) => {
+        if (p.alpha > 0) {
+          alive = true;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= p.decay;
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+          ctx.shadowBlur = p.size * 2;
+          ctx.shadowColor = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+          ctx.restore();
+        }
+      });
+
+      if (alive) {
+        animId = requestAnimationFrame(render);
+      }
+    };
+
+    render();
+    return () => {
+      cancelAnimationFrame(animId);
+    };
+  }, [active]);
+
+  if (!active) return null;
+
+  return (
+    <canvas 
+      ref={canvasRef} 
+      className="absolute inset-0 w-full h-full pointer-events-none z-50 rounded-2xl"
+      style={{ mixBlendMode: 'screen' }}
+    />
+  );
+}
+
 export function VeilMessageBubble({ 
   message, 
   isCloakMode, 
@@ -341,6 +437,7 @@ export function VeilMessageBubble({
             ${cloakState === 'cloaked' ? 'opacity-80' : ''}
           `}
         >
+          <PixelDustBurnEffect active={burnPhase === 'burn' || burnPhase === 'ash'} />
           {/* Burn Mask Overlay */}
           {burnPhase === 'burn' && (
             <motion.div 

@@ -29,16 +29,39 @@ function fmt(n: number) {
 // ─── Floating emoji burst on double-tap ──────────────────────
 function HeartBurst({ x, y, onDone }: { x: number; y: number; onDone: () => void }) {
   return (
-    <motion.div
-      className="pointer-events-none fixed z-[200] text-5xl select-none"
-      style={{ left: x - 30, top: y - 30 }}
-      initial={{ scale: 0, opacity: 1 }}
-      animate={{ scale: [0, 1.6, 1.2], opacity: [1, 1, 0], y: -80 }}
-      transition={{ duration: 0.9, ease: 'easeOut' }}
-      onAnimationComplete={onDone}
+    <div
+      className="pointer-events-none fixed z-[200] select-none"
+      style={{ left: x, top: y, transform: 'translate(-50%, -50%)' }}
     >
-      ⚡
-    </motion.div>
+      {/* Expanding Ripple Rings */}
+      <motion.div
+        className="absolute -inset-8 rounded-full border-2 border-[#00F0FF]/60 bg-gradient-to-r from-[#B026FF]/10 to-[#00F0FF]/10 blur-[1px]"
+        initial={{ scale: 0.1, opacity: 1 }}
+        animate={{ scale: [0.1, 2.5], opacity: [1, 0], y: -50 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      />
+      <motion.div
+        className="absolute -inset-16 rounded-full border border-[#B026FF]/40"
+        initial={{ scale: 0.1, opacity: 1 }}
+        animate={{ scale: [0.1, 3], opacity: [0.8, 0], y: -80 }}
+        transition={{ duration: 1.0, ease: 'easeOut', delay: 0.1 }}
+      />
+      {/* Main Floating Neon Zap Icon */}
+      <motion.div
+        initial={{ scale: 0, opacity: 1, rotate: -15 }}
+        animate={{
+          scale: [0, 1.8, 1.4, 0],
+          opacity: [1, 1, 1, 0],
+          y: -120,
+          rotate: [0, 15, -10],
+        }}
+        transition={{ duration: 0.9, ease: 'easeOut' }}
+        onAnimationComplete={onDone}
+        className="flex items-center justify-center p-3 rounded-full bg-black/45 backdrop-blur-md border border-[#00F0FF] shadow-[0_0_20px_#00F0FF]"
+      >
+        <Zap className="w-8 h-8 text-[#00F0FF] fill-[#00F0FF]" />
+      </motion.div>
+    </div>
   );
 }
 

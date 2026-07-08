@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Gift, Heart, Calendar, Bell, BellOff, Trash2, Edit2, Check, X, ChevronRight, Cake, Star } from 'lucide-react';
 import { mockUsers } from '../lib/mock/mockData';
+import { simulatePulseReward } from '../store/notificationStore';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -348,8 +349,12 @@ export default function SocialCalendarScreen() {
 
   const handleWish = (event: CalendarEvent) => {
     setSentWish(event.id);
-    setTimeout(() => setSentWish(null), 2500);
-    if (event.userId) navigate(`/chat/${event.userId}`);
+    // Trigger high-priority micro-toast and audio chime!
+    simulatePulseReward("birthday");
+    setTimeout(() => {
+      setSentWish(null);
+      if (event.userId) navigate(`/chat/${event.userId}`);
+    }, 1500);
   };
 
   return (
@@ -479,7 +484,16 @@ export default function SocialCalendarScreen() {
                         {ev.note && (
                           <p className="text-white/40 text-[11px] mt-1 leading-snug">{ev.note}</p>
                         )}
-                        <div className="flex items-center gap-1.5 mt-1">
+                        {ev.type === 'birthday' && (
+                          <button
+                            onClick={() => handleWish(ev)}
+                            className="mt-3 py-1.5 px-3 rounded-xl bg-gradient-to-r from-[#B026FF]/20 to-[#00F0FF]/20 hover:from-[#B026FF]/30 hover:to-[#00F0FF]/30 border border-[#00F0FF]/40 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-[0_0_10px_rgba(0,240,255,0.15)] active:scale-95 transition-all text-left w-[130px]"
+                          >
+                            <span>🎁</span>
+                            <span className="truncate">{sentWish === ev.id ? 'Sent!' : 'Spark Wish'}</span>
+                          </button>
+                        )}
+                        <div className="flex items-center gap-1.5 mt-2">
                           <Bell size={10} className={ev.notifyEnabled ? 'text-purple-400' : 'text-white/20'} />
                           <span className="text-[10px] text-white/30">
                             {ev.notifyEnabled ? `${ev.reminderDays}d before` : 'Muted'}

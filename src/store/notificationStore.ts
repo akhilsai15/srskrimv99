@@ -24,7 +24,42 @@ interface NotificationState {
   toggleCreatorNotifications: (id: string) => void;
   pulseToasts: any[];
   removePulseToast: (id: string) => void;
+  soundEffectsEnabled: boolean;
+  toggleSoundEffects: () => void;
+  addToast: (points: number, message: string) => void;
 }
+
+const playChime = () => {
+  try {
+    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc1.connect(gainNode);
+    osc2.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc1.frequency.setValueAtTime(659.25, audioCtx.currentTime); // E5
+    osc2.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
+    
+    osc1.type = "sine";
+    osc2.type = "triangle";
+    
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + 0.05);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.95);
+    
+    osc1.start(audioCtx.currentTime);
+    osc2.start(audioCtx.currentTime);
+    
+    osc1.stop(audioCtx.currentTime + 1.0);
+    osc2.stop(audioCtx.currentTime + 1.0);
+  } catch (e) {
+    console.warn("AudioContext failed or blocked:", e);
+  }
+};
 
 export const useNotificationStore = create<NotificationState>((set) => ({
   globalVibeNotificationsEnabled: true,
@@ -50,6 +85,20 @@ export const useNotificationStore = create<NotificationState>((set) => ({
   toggleCreatorNotifications: (id) => set((state) => ({ creatorNotificationPrefs: { ...state.creatorNotificationPrefs, [id]: !state.creatorNotificationPrefs[id] } })),
   pulseToasts: [],
   removePulseToast: (id) => set((state) => ({ pulseToasts: state.pulseToasts.filter(toast => toast.id !== id) })),
+  soundEffectsEnabled: true,
+  toggleSoundEffects: () => set((state) => ({ soundEffectsEnabled: !state.soundEffectsEnabled })),
+  addToast: (points, message) => set((state) => {
+    if (state.soundEffectsEnabled) {
+      playChime();
+    }
+    const newToast = {
+      id: `toast-${Date.now()}`,
+      points,
+      message,
+      total: 12500 + points,
+    };
+    return { pulseToasts: [...state.pulseToasts, newToast] };
+  }),
 }));
 
 // Mock functions
@@ -59,5 +108,28 @@ export const simulateVibeComment = (user: any, comment: any, reel: any, reply: b
 export const scheduleGrindReminder = () => {};
 export const showGrindNotification = (count: number) => {};
 export const checkGrindRisk = () => ({ atRisk: false, grindCount: 0 });
-export const simulatePulseReward = (event: string) => {};
+
+export const simulatePulseReward = (event: string) => {
+  let points = 50;
+  let msg = "Unlocked achievement!";
+  if (event.includes("milestone")) {
+    points = 100;
+    msg = "Reached a brand new follower milestone! 🏆";
+  } else if (event.includes("streak")) {
+    points = 200;
+    msg = "Blaze Streak is hot! You got bonus points! 🔥";
+  } else if (event.includes("vibe")) {
+    points = 30;
+    msg = "Your Vibe post is trending today! 📈";
+  } else if (event.includes("birthday")) {
+    points = 75;
+    msg = "Spark wish successfully sent! Friend is happy! 🎉";
+  } else {
+    points = 50;
+    msg = event || "Received Pulse Reward! ⚡";
+  }
+  
+  useNotificationStore.getState().addToast(points, msg);
+};
+
 export const simulateLanguageMatchNotification = (langs: string[], count: number, force: boolean) => {};

@@ -1611,14 +1611,21 @@ export function SparkViewer({
         <AnimatePresence mode="wait">
           <motion.div
             key={`${group.userId || "group"}_${userIndex}`}
-            initial={{ x: direction === 1 ? "100%" : "-100%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direction === 1 ? "-100%" : "100%", opacity: 0 }}
+            initial={{ x: direction === 1 ? "100%" : "-100%", scale: 1, filter: "brightness(1) blur(0px)", opacity: 0 }}
+            animate={{ x: 0, scale: 1, filter: "brightness(1) blur(0px)", opacity: 1 }}
+            exit={
+              direction === 1
+                ? {
+                    x: 0,
+                    scale: 1.15,
+                    filter: "brightness(3.5) contrast(1.5) saturate(2) hue-rotate(20deg) blur(12px)",
+                    opacity: 0,
+                  }
+                : { x: "100%", scale: 1, filter: "brightness(1) blur(0px)", opacity: 0 }
+            }
             transition={{
-              type: "spring",
-              damping: 25,
-              stiffness: 300,
-              mass: 0.8,
+              duration: direction === 1 ? 0.65 : 0.55,
+              ease: "easeInOut",
             }}
             drag="y"
             dragDirectionLock
