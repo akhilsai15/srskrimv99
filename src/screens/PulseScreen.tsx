@@ -1639,6 +1639,17 @@ function generateVideoThumbnail(videoUrl: string): Promise<string> {
     return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
   };
 
+  // Add instant presets to avoid slow CORS timeouts on mock videos in Pulse Screen
+  if (videoUrl.includes('mov_bbb.mp4')) {
+    return Promise.resolve('https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=400&h=700&fit=crop');
+  }
+  if (videoUrl.includes('mixkit')) {
+    return Promise.resolve('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=400&h=700&fit=crop');
+  }
+  if (videoUrl.includes('vimeo.com') || videoUrl.includes('vimeo')) {
+    return Promise.resolve('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=700&fit=crop');
+  }
+
   return new Promise((resolve) => {
     const video = document.createElement('video');
     video.style.display = 'none';
@@ -1649,13 +1660,17 @@ function generateVideoThumbnail(videoUrl: string): Promise<string> {
     const timeoutId = setTimeout(() => {
       cleanup();
       resolve(getFallback(videoUrl));
-    }, 3500);
+    }, 1000);
 
     const cleanup = () => {
       clearTimeout(timeoutId);
       video.onseeked = null;
       video.onerror = null;
       video.onloadedmetadata = null;
+      video.src = '';
+      try {
+        video.load();
+      } catch (e) {}
     };
 
     video.onseeked = () => {
@@ -1900,6 +1915,12 @@ function PulseCreateSheet({ isOpen, onClose, currentUser, onPost, onSchedule, dr
             }
             setMediaLimitWarning(warning);
 
+            // Clean up videoElement right away
+            videoElement.onloadedmetadata = null;
+            videoElement.onerror = null;
+            videoElement.src = '';
+            try { videoElement.load(); } catch (e) {}
+
             generateVideoThumbnail(fileUrl)
               .then(thumb => {
                 resolve({
@@ -1919,6 +1940,11 @@ function PulseCreateSheet({ isOpen, onClose, currentUser, onPost, onSchedule, dr
               });
           };
           videoElement.onerror = () => {
+            videoElement.onloadedmetadata = null;
+            videoElement.onerror = null;
+            videoElement.src = '';
+            try { videoElement.load(); } catch (e) {}
+
             generateVideoThumbnail(fileUrl)
               .then(thumb => {
                 resolve({
@@ -3097,7 +3123,7 @@ export default function PulseScreen() {
         setPosts(combined);
         setLoading(false);
       }
-    }, append ? 700 : 900);
+    }, append ? 100 : 150);
   }, [isLoadingMore]);
 
   // Initial load

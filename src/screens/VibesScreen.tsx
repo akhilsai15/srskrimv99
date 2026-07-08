@@ -642,14 +642,18 @@ function VibeCard({
       }
     };
 
+    let isAutoplayBlocked = false;
+
     const tryPlayAudio = () => {
-      if (isPlaying && isActive) {
+      if (isPlaying && isActive && !isAutoplayBlocked) {
         audio.play().catch((err) => {
           console.warn("Autoplay blocked video/audio track:", err);
+          isAutoplayBlocked = true;
           
           // Set up retry on user interaction
           if (!retryOnInteraction) {
             retryOnInteraction = () => {
+              isAutoplayBlocked = false;
               if (isPlaying && isActive) {
                 audio.play()
                   .then(() => {
@@ -1504,6 +1508,12 @@ function VibeCreateSheet({ isOpen, onClose, currentUser, onPost }: {
         }
         setMediaLimitWarning(warning);
 
+        // Clean up videoElement right away
+        videoElement.onloadedmetadata = null;
+        videoElement.onerror = null;
+        videoElement.src = '';
+        try { videoElement.load(); } catch (e) {}
+
         const r = new FileReader();
         r.onload = () => {
           setMediaUrl(r.result as string);
@@ -1515,6 +1525,12 @@ function VibeCreateSheet({ isOpen, onClose, currentUser, onPost }: {
         r.readAsDataURL(file);
       };
       videoElement.onerror = () => {
+        // Clean up videoElement right away
+        videoElement.onloadedmetadata = null;
+        videoElement.onerror = null;
+        videoElement.src = '';
+        try { videoElement.load(); } catch (e) {}
+
         setMediaLimitWarning(null);
         const r = new FileReader();
         r.onload = () => {
@@ -2317,7 +2333,7 @@ export default function VibesScreen() {
       if (shouldReset) {
         setLoading(false);
       }
-    }, shouldReset ? 600 : 0);
+    }, shouldReset ? 150 : 0);
 
     return () => clearTimeout(timer);
   }, [mood, activeFilter, userVibes, refreshOffsets, sessionUserVibes]);
@@ -2351,7 +2367,7 @@ export default function VibesScreen() {
         });
         
         setLoadingMore(false);
-      }, 400);
+      }, 100);
     }
   }, [currentIdx, vibes.length, loadingMore, mood, activeFilter, refreshOffsets]);
 

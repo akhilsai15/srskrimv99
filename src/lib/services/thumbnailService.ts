@@ -32,19 +32,30 @@ export function generateVideoThumbnail(videoUrl: string): Promise<string> {
     // Ignore base64 encoding errors or storage limits
   }
 
-  // Check if it's the standard W3Schools demo video and provide a high-quality preset thumbnail
+  // Instant premium presets for common remote mock videos to avoid CORS timeouts entirely
   if (videoUrl.includes('mov_bbb.mp4')) {
     const preset = 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=400&h=700&fit=crop';
     thumbnailCache.set(videoUrl, preset);
     return Promise.resolve(preset);
   }
+  if (videoUrl.includes('mixkit')) {
+    const preset = 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=400&h=700&fit=crop'; // space/stars
+    thumbnailCache.set(videoUrl, preset);
+    return Promise.resolve(preset);
+  }
+  if (videoUrl.includes('vimeo.com') || videoUrl.includes('vimeo')) {
+    const preset = 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=700&fit=crop'; // neon/abstract
+    thumbnailCache.set(videoUrl, preset);
+    return Promise.resolve(preset);
+  }
 
   return new Promise((resolve) => {
-    // Set a timeout of 3 seconds so we don't hang the UI if the video is slow
+    // Set a fast timeout of 1000ms so we don't hang the UI if the video is slow or blocked by CORS
     const timeoutId = setTimeout(() => {
       const fallback = getGradientPlaceholder(videoUrl);
+      cleanup();
       resolve(fallback);
-    }, 3000);
+    }, 1000);
 
     const video = document.createElement('video');
     video.src = videoUrl;
@@ -71,7 +82,6 @@ export function generateVideoThumbnail(videoUrl: string): Promise<string> {
           // Draw video frame
           ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
           
-          // Add a subtle branding touch - a small glow or play icon overlay (optional, but keep it clean)
           const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
           
           // Save in caches
@@ -80,7 +90,6 @@ export function generateVideoThumbnail(videoUrl: string): Promise<string> {
             localStorage.setItem(`skrim_vthumb_${btoa(videoUrl).substring(0, 40)}`, dataUrl);
           } catch (e) {}
           
-          clearTimeout(timeoutId);
           cleanup();
           resolve(dataUrl);
           return;
@@ -89,24 +98,25 @@ export function generateVideoThumbnail(videoUrl: string): Promise<string> {
         console.warn('CORS or security error extracting video frame; falling back to styled vector thumbnail:', err);
       }
       
-      // Fallback
-      clearTimeout(timeoutId);
       cleanup();
       resolve(getGradientPlaceholder(videoUrl));
     };
 
     const handleError = () => {
-      clearTimeout(timeoutId);
       cleanup();
       resolve(getGradientPlaceholder(videoUrl));
     };
 
     const cleanup = () => {
+      clearTimeout(timeoutId);
       video.removeEventListener('seeked', captureFrame);
       video.removeEventListener('loadeddata', captureFrame);
       video.removeEventListener('error', handleError);
+      // Explicitly release resources to avoid memory leaks/decoder exhaustion
       video.src = '';
-      video.load();
+      try {
+        video.load();
+      } catch (e) {}
     };
 
     video.addEventListener('seeked', captureFrame);
